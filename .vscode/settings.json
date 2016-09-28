@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "editor.renderWhitespace": true,
+    "files.exclude": {
+    },
+    "search.exclude": {
+        "node_modules": true,
+        "public": true
+    },
+    "files.eol": "\n"
+}
