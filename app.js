@@ -8,9 +8,8 @@ var router = require('./api/controllers');
 var async = require('async');
 var bodyParser = require('body-parser');
 var config = require('nconf');
-var logger = require('winston');
 var path = require('path');
-
+var logger = require('./api/helpers/logger')('APP');
 require('dotenv').load();
 config.use('memory')
     .argv()
@@ -26,7 +25,6 @@ app.use('/api', router);
 
 // SETUP SWAGGER
 // =============================================================================
-
 var SwaggerExpress = require('swagger-express-mw');
 var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 SwaggerExpress.create({
@@ -37,6 +35,7 @@ SwaggerExpress.create({
     app.use(SwaggerUi(swaggerExpress.runner.swagger, { apiDocs: '/api/api-docs', swaggerUi: '/api/docs' }));
     // Install middleware
     swaggerExpress.register(app);
+    logger.info('Initialize Swagger');
 });
 
 // SETUP DATABASE
@@ -46,6 +45,7 @@ var mongodbList = {
     local: 'mongodb://localhost/db',
     remote: 'mongodb://test:test@ds033126.mlab.com:33126/quas-test'
 }
+mongoose.Promise = global.Promise;
 mongoose.connect(mongodbList[config.get('DB_LOCATION')], {
     server: {
         socketOptions: {
@@ -61,7 +61,12 @@ mongoose.connect(mongodbList[config.get('DB_LOCATION')], {
     }
 });
 mongoose.connection
-    .on('error', console.error.bind(console, 'connection error:'));
+    .on('connected', () => {
+        logger.info('Mongoose connection open to', mongodbList[config.get('DB_LOCATION')]);
+    })
+    .on('error', (error) => {
+        logger.error('Mongoose connection error: ', error);
+    });
 
 // Initialize Modules
 // async.series([
@@ -78,6 +83,7 @@ mongoose.connection
 //         }
 //     }
 // );
+
 app.listen(config.get('NODE_PORT'));
 
 // SETUP TESTING

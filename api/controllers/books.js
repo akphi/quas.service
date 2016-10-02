@@ -3,6 +3,7 @@
 var express = require('express')
 var router = express.Router()
 var Book = require('../models/book');
+var logger = require('../helpers/logger')('BOOKS');
 
 router.route('/:book_id')
 
