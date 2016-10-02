@@ -4,7 +4,7 @@ var moment = require('moment');
 var winston = require('winston');
 
 module.exports = (label) => {
-    let a = winston.loggers.add(label, {
+    winston.loggers.add(label, {
         file: {
             level: 'info',
             filename: './log/main.log',
@@ -38,4 +38,38 @@ module.exports = (label) => {
         }
     });
     return winston.loggers.get(label);
+};
+
+
+let trafficTracker = new winston.Logger({
+    transports: [
+        new winston.transports.File({
+            level: 'info',
+            filename: './log/traffic.log',
+            handleExceptions: true,
+            json: true,
+            maxsize: 5242880, //5MB
+            maxFiles: 5,
+            colorize: true,
+            prettyPrint: true,
+            timestamp: true,
+            label: 'TRAFFIC'
+        }),
+        new winston.transports.Console({
+            level: 'debug',
+            handleExceptions: true,
+            json: false,
+            prettyPrint: true,
+            colorize: true,
+            timestamp: true,
+            label: 'TRAFFIC'
+        })
+    ],
+    exitOnError: false
+});
+
+module.exports.stream = {
+    write: function (message, encoding) {
+        trafficTracker.info(message);
+    }
 };

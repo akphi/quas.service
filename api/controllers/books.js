@@ -57,7 +57,6 @@ router.route('/')
     })
 
     .post((req, res) => {
-        logger.debug('a');
         var book = new Book();
         book.name = req.body.name;
         book.edition = req.body.edition;
