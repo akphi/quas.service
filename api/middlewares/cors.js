@@ -1,17 +1,32 @@
 'usestrict';
 
-var config = require('nconf');
+var config = require('../../config/initializers/config');
+var corser = require('corser');
+var logger = require('../helpers/logger')('MIDDLEWARE-CORS');
 
-module.exports = (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', config.get('NODE_HOST'));
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.sendStatus(200);
-    }
-    else {
-      next();
-    }
-};
+
+// // Customize Method
+// module.exports = (req, res, next) => {
+//     var corserRequestListener = corser.create({
+//         origins: [config.get('NODE_HOST')],
+//         // requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
+//         // methods: ["GET", "POST", "PUT", "DELETE"],
+//         endPreflightRequests: false
+//     });
+
+//     corserRequestListener(req, res, () => {
+//         if (req.method === "OPTIONS") {
+//             res.writeHead(204);
+//             res.end();
+//         } else {
+//             next();
+//         }
+//     });
+// };
+
+module.exports = corser.create({
+    origins: [config.get('NODE_HOST')],
+    requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    endPreflightRequests: true
+});

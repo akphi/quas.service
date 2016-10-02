@@ -7,13 +7,9 @@ var app = express();
 var router = require('./api/controllers');
 var async = require('async');
 var bodyParser = require('body-parser');
-var config = require('nconf');
+var config = require('./config/initializers/config');
 var path = require('path');
 var logger = require('./api/helpers/logger')('APP');
-require('dotenv').load();
-config.use('memory')
-    .argv()
-    .env();
 
 app.use(express.static('public'));
 // configure app to use bodyParser() => allow get the data from a POST

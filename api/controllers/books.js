@@ -3,7 +3,7 @@
 var express = require('express')
 var router = express.Router()
 var Book = require('../models/book');
-var logger = require('../helpers/logger')('BOOKS');
+var logger = require('../helpers/logger')('CONTROLLER-BOOKS');
 
 router.route('/:book_id')
 
@@ -57,12 +57,12 @@ router.route('/')
     })
 
     .post((req, res) => {
+        logger.debug('a');
         var book = new Book();
         book.name = req.body.name;
         book.edition = req.body.edition;
         book.author = req.body.author;
         book.publisher = req.body.publisher;
-        // save the book and check for errors
         book.save((err) => {
             if (err) {
                 res.send(err);
