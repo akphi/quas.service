@@ -1,7 +1,6 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
 var logger = require('../helpers/logger')('CONTROLLER-INDEX');
 var trafficLogger = require('../helpers/logger').stream;
 router.use(require('morgan')('(:status) :method :url - :referrer :remote-user :remote-addr :response-time ms - Length :res[content-length]', { "stream": trafficLogger }));

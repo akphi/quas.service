@@ -2,13 +2,13 @@
 
 var config = require('../../config/initializers/config');
 var corser = require('corser');
-var logger = require('../helpers/logger')('MIDDLEWARE-CORS');
+var logger = require('../helpers/logger')('MIDDLEWARE-AUTHENTICATION');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 module.exports = function (req, res, next) {
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['authorization'];
-
+  logger.debug('GET send')
   // decode token
   if (token) {
     // verifies secret and checks exp

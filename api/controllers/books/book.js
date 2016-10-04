@@ -1,11 +1,10 @@
 'use strict';
 
-var express = require('express')
-var router = express.Router()
-var Book = require('../models/book');
-var logger = require('../helpers/logger')('CONTROLLER-BOOKS');
+var router = require('express').Router()
+var Book = require('../../models/book');
+var logger = require('../../helpers/logger')('CONTROLLER-BOOKS');
 
-router.route('/:book_id')
+router.route('/')
 
   .get((req, res) => {
     Book.findById(req.params.book_id, (err, book) => {
@@ -42,31 +41,6 @@ router.route('/:book_id')
         res.send(err);
       }
       res.json({ message: 'Book removed' });
-    });
-  });
-
-router.route('/')
-
-  .get((req, res) => {
-    Book.find((err, books) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json(books);
-    });
-  })
-
-  .post((req, res) => {
-    var book = new Book();
-    book.name = req.body.name;
-    book.edition = req.body.edition;
-    book.author = req.body.author;
-    book.publisher = req.body.publisher;
-    book.save((err) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json({ message: 'Book added!' });
     });
   });
 

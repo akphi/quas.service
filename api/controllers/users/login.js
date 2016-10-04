@@ -1,20 +1,13 @@
 'use strict';
 
-var express = require('express')
-var router = express.Router()
-var config = require('../../config/initializers/config');
-var User = require('../models/user'); // get our mongoose model
-var logger = require('../helpers/logger')('CONTROLLER-USERS');
+var router = require('express').Router()
+var config = require('../../../config/initializers/config');
+var User = require('../../models/user'); // get our mongoose model
+var logger = require('../../helpers/logger')('CONTROLLER-USERS');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
-router.route('/:user_id', require('../middlewares/authentication'))
-  .get((req, res) => {
-    User.find({}, (err, users) => {
-      res.json(users);
-    });
-  })
+router.route('/')
 
-router.route('/login')
   .post((req, res) => {
     User.findOne({
       name: req.body.name
@@ -43,28 +36,6 @@ router.route('/login')
           });
         }
       }
-    });
-  });
-
-router.route('/logout');
-
-router.route('/')
-  .get((req, res) => {
-    User.find({}, function (err, users) {
-      res.json(users);
-    });
-  })
-
-  .post((req, res) => {
-    var nick = new User({
-      name: req.body.name,
-      password: req.body.password,
-      role: 1
-    });
-    nick.save(function (err) {
-      if (err) throw err;
-      console.log('User saved successfully');
-      res.json({ success: true });
     });
   });
 
