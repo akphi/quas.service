@@ -9,6 +9,5 @@ router.use(require('morgan')('(:status) :method :url - :referrer :remote-user :r
 router.use('/', require('../middlewares/cors'));
 router.use('/books', require('./books'));
 router.use('/users', require('./users'));
-router.use('/authenticate', require('./users'));
 
 module.exports = router;
