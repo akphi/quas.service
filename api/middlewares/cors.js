@@ -25,8 +25,8 @@ var logger = require('../helpers/logger')('MIDDLEWARE-CORS');
 // };
 
 module.exports = corser.create({
-    origins: [config.get('NODE_HOST')],
-    requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    endPreflightRequests: true
+  origins: [config.get('NODE_HOST')],
+  requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  endPreflightRequests: true
 });
