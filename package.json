@@ -17,12 +17,11 @@
     "minimist": "^0.1.0",
     "moment": "^2.15.1",
     "mongoose": "^4.6.1",
-    "morgan":"^1.7.0",
+    "morgan": "^1.7.0",
     "nconf": "^0.8.4",
     "split": "^1.0.0",
     "swagger-express-mw": "^0.1.0",
     "winston": "^2.2.0"
-    
   },
   "devDependencies": {
     "should": "^7.1.0",
