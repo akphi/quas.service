@@ -33,7 +33,7 @@ router.route('/')
             res.status(200).send({
               success: true,
               message: 'Enjoy your token!',
-              token: token
+              token: 'Bearer' + ' ' + token
             });
           } else {
             res.status(400).send({
