@@ -1,8 +1,8 @@
 'use strict';
 
 var router = require('express').Router()
-var Book = require('../../models/book');
-var logger = require('../../helpers/logger')('CONTROLLER-BOOKS');
+var Book = require('../../../models/book');
+var logger = require('../../../helpers/logger')('CONTROLLER-BOOK');
 
 router.route('/')
 
