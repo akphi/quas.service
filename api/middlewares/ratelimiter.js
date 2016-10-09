@@ -9,10 +9,9 @@ var RedisStore = require('rate-limit-redis');
 
 var limiter = new RateLimit({
   store: new RedisStore({
-    // see Configuration 
   }),
-  windowMs: 60 * 1000,
-  max: 1000,
+  windowMs: Number(config.get('RATE_TIME')),
+  max: Number(config.get('RATE_LIMIT')),
   delayMs: 0 // disable delaying - full speed until the max limit is reached
 });
 

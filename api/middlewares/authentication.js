@@ -4,30 +4,23 @@ var config = require('../../config/initializers/config');
 var corser = require('corser');
 var logger = require('../helpers/logger')('MIDDLEWARE');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var response = require('../helpers/response');
 
 module.exports = function (req, res, next) {
-  // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['authorization'];
-  logger.debug('GET send')
-  // decode token
   if (token) {
-    // verifies secret and checks exp
     jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decoded) => {
       if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });
+        // ERROR IN TOKEN VALIDATION
+        return response(res, null, 500, 'TK003', null);
       } else {
-        // if everything is good, save to request for use in other routes
-
+        // AUTHICATED
         req.decoded = decoded;
         next();
       }
     });
   } else {
-    // if there is no token
-    // return an error
-    return res.status(403).send({
-      success: false,
-      message: 'No token provided.'
-    });
+    // NO TOKEN
+    return response(res, null, 403, 'TK004', null);
   }
 };
