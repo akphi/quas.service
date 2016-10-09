@@ -3,7 +3,7 @@
 var router = require('express').Router()
 var config = require('../../../../config/initializers/config');
 var User = require('../../../models/user');
-var logger = require('../../../helpers/logger')('CONTROLLER-USER');
+var logger = require('../../../helpers/logger')('CONTROLLER');
 
 router.route('/')
   .get((req, res) => {

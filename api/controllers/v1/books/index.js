@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var logger = require('../../../helpers/logger')('BOOKS-INDEX');
+var logger = require('../../../helpers/logger')('ROUTER');
 
 router.use('/', require('./books'));
 router.use('/:book_id', require('./book'));

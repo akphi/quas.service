@@ -1,8 +1,8 @@
-'usestrict';
+'use strict';
 
 var config = require('../../config/initializers/config');
 var corser = require('corser');
-var logger = require('../helpers/logger')('MIDDLEWARE-CORS');
+var logger = require('../helpers/logger')('MIDDLEWARE');
 
 
 // // Customize Method
@@ -26,7 +26,7 @@ var logger = require('../helpers/logger')('MIDDLEWARE-CORS');
 
 module.exports = corser.create({
   origins: [config.get('NODE_HOST')],
-  requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  requestHeaders: ['AUTHORIZATION', 'CONTENT-TYPE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   endPreflightRequests: true
 });

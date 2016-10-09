@@ -1,4 +1,4 @@
-'usestrict';
+'use strict';
 
 var moment = require('moment');
 var winston = require('winston');
@@ -25,22 +25,17 @@ module.exports = (label) => {
       prettyPrint: true,
       label: label,
       colorize: true,
-      timestamp: true
-      // // Customize Formatter
-      // timestamp: () => {
-      //     return moment().utc().format();
-      // },
-      // formatter: (options) => {
-      //     console.log(options);
-      //     // Return string will be passed to logger.
-      //     return options.timestamp() + ' ' + winston.config.colorize(options.level, options.level.toUpperCase()) + ' [' + label + '] ' + (undefined !== options.message ? options.message : '') +
-      //         (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
-      // }
+      timestamp: () => {
+        return moment().utc().format();
+      },
+      formatter: (options) => {
+        return options.timestamp() + ' ' + winston.config.colorize(options.level, options.level.toUpperCase()) + ' [' + label + '] ' + (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
+      }
     }
   });
   return winston.loggers.get(label);
 };
-
 
 let trafficTracker = new winston.Logger({
   transports: [

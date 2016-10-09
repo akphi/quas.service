@@ -10,9 +10,15 @@ var bodyParser = require('body-parser');
 var config = require('./config/initializers/config');
 var path = require('path');
 var logger = require('./api/helpers/logger')('APP');
-
 app.use(express.static('public'));
-// configure app to use bodyParser() => allow get the data from a POST
+
+
+// SETUP ROUTER and MIDDLEWARE
+// =============================================================================
+var helmet = require('helmet');
+app.use(helmet());
+app.disable('x-powered-by');
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));

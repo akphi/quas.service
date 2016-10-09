@@ -2,7 +2,7 @@
 
 var router = require('express').Router()
 var Book = require('../../../models/book');
-var logger = require('../../../helpers/logger')('CONTROLLER-BOOK');
+var logger = require('../../../helpers/logger')('CONTROLLER');
 
 router.route('/')
 

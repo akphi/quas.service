@@ -3,7 +3,7 @@
 var router = require('express').Router()
 var config = require('../../../../config/initializers/config');
 var User = require('../../../models/user');
-var logger = require('../../../helpers/logger')('CONTROLLER-USERS');
+var logger = require('../../../helpers/logger')('CONTROLLER');
 var password = require('../../../helpers/password');
 var jwt = require('jsonwebtoken');
 

@@ -3,7 +3,7 @@
 var router = require('express').Router()
 var config = require('../../../../config/initializers/config');
 var User = require('../../../models/user');
-var logger = require('../../../helpers/logger')('CONTROLLER-USERS');
+var logger = require('../../../helpers/logger')('CONTROLLER');
 var password = require('../../../helpers/password');
 
 router.route('/')
@@ -16,7 +16,6 @@ router.route('/')
 
   .post((req, res) => {
     password.hashPassword(req.body.password, (err, combined) => {
-      // logger.debug();
       var nick = new User({
         name: req.body.name,
         password: combined.toString('base64'),

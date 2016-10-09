@@ -1,7 +1,7 @@
-'usestrict';
+'use strict';
 
 var config = require('../../config/initializers/config');
-var logger = require('../helpers/logger')('MIDDLEWARE-RATELIMITER');
+var logger = require('../helpers/logger')('MIDDLEWARE');
 var RateLimit = require('express-rate-limit');
 var RedisStore = require('rate-limit-redis');
 

@@ -3,6 +3,7 @@
 
 /build
 /log/*
+dump.rdb
 database.sqlite
 /node_modules
 ncp-debug.log

@@ -2,7 +2,7 @@
 
 var config = require('../../config/initializers/config');
 var corser = require('corser');
-var logger = require('../helpers/logger')('MIDDLEWARE-AUTHENTICATION');
+var logger = require('../helpers/logger')('MIDDLEWARE');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 module.exports = function (req, res, next) {
