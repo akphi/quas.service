@@ -1,11 +1,12 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var path = require('path');
+var router = require('express').Router();
+var logger = require('../helpers/logger')('ROUTER');
+var trafficLogger = require('../helpers/logger').stream;
+router.use(require('morgan')('(:status) :method :url - :referrer :remote-user :remote-addr :response-time ms - Length :res[content-length]', { "stream": trafficLogger }));
 
 router.use('/', require('../middlewares/cors'));
-
-router.use('/books', require('./books'));
+router.use('/', require('../middlewares/ratelimiter'));
+router.use('/v1', require('./v1'));
 
 module.exports = router;
