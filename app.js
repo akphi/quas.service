@@ -48,7 +48,7 @@ async.series([
   function initializeDBConnection(callback) {
     let mongoose = require('mongoose');
     let mongodbList = {
-      local: 'mongodb://localhost/db',
+      local: 'mongodb://localhost/quas-db',
       remote: 'mongodb://test:test@ds033126.mlab.com:33126/quas-test'
     }
     mongoose.Promise = global.Promise;
