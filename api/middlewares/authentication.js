@@ -1,13 +1,13 @@
 'usestrict';
 
-var config = require('../../config/initializers/config');
-var corser = require('corser');
-var logger = require('../helpers/logger')('MIDDLEWARE');
-var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var response = require('../helpers/response');
+let config = require('../../config/initializers/config');
+let corser = require('corser');
+let logger = require('../helpers/logger')('MIDDLEWARE');
+let jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+let response = require('../helpers/response');
 
 module.exports = function (req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['authorization'];
+  let token = req.body.token || req.query.token || req.headers['authorization'];
   if (token) {
     jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decoded) => {
       if (err) {

@@ -1,13 +1,13 @@
 'use strict';
 
-var config = require('../../config/initializers/config');
-var corser = require('corser');
-var logger = require('../helpers/logger')('MIDDLEWARE');
+let config = require('../../config/initializers/config');
+let corser = require('corser');
+let logger = require('../helpers/logger')('MIDDLEWARE');
 
 
 // // Customize Method
 // module.exports = (req, res, next) => {
-//     var corserRequestListener = corser.create({
+//     let corserRequestListener = corser.create({
 //         origins: [config.get('NODE_HOST')],
 //         // requestHeaders: ["AUTHORIZATION", "CONTENT-TYPE"],
 //         // methods: ["GET", "POST", "PUT", "DELETE"],

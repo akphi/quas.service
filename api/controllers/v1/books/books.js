@@ -1,31 +1,38 @@
 'use strict';
 
-var router = require('express').Router()
-var Book = require('../../../models/book');
-var logger = require('../../../helpers/logger')('CONTROLLER');
+let router = require('express').Router()
+let Book = require('../../../models/book');
+let logger = require('../../../helpers/logger')('CONTROLLER');
 
 router.route('/')
 
   .get((req, res) => {
-    Book.find((err, books) => {
-      if (err) {
-        res.send(err);
+    //TODO: Rewrite find, sanitize name
+    Book.find((errDB, books) => {
+      //TODO: res
+      if (errDB) {
+        res.send(errDB);
+      } else {
+        res.json(books);
       }
-      res.json(books);
     });
   })
 
   .post((req, res) => {
-    var book = new Book();
+    //TODO: validation
+    let book = new Book();
     book.name = req.body.name;
     book.edition = req.body.edition;
     book.author = req.body.author;
     book.publisher = req.body.publisher;
-    book.save((err) => {
-      if (err) {
-        res.send(err);
+    book.isbn = req.body.isbn;
+    book.save((errDB) => {
+      //TODO: res
+      if (errDB) {
+        res.send(errDB);
+      } else {
+        res.json({ message: 'Book added!' });
       }
-      res.json({ message: 'Book added!' });
     });
   });
 

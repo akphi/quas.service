@@ -1,13 +1,14 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var BookSchema = new Schema({
-  name: String,
-  edition: Number,
-  author: String,
-  publisher: String
+let BookSchema = new Schema({
+  name: { type: String, required: true },
+  edition: { type: Number },
+  author: { type: String, required: true },
+  publisher: String,
+  isbn: { type: String, index: { unique: true } }
 });
 
 module.exports = mongoose.model('Book', BookSchema);

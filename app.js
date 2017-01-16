@@ -2,15 +2,15 @@
 
 // CONFIG
 // =============================================================================
-var express = require('express');
-var app = express();
-var router = require('./api/controllers');
-var async = require('async');
-var bodyParser = require('body-parser');
-var path = require('path');
-var logger = require('./api/helpers/logger')('APP');
-var response = require('./api/helpers/response');
-var config;
+let express = require('express');
+let app = express();
+let router = require('./api/controllers');
+let async = require('async');
+let bodyParser = require('body-parser');
+let path = require('path');
+let logger = require('./api/helpers/logger')('APP');
+let response = require('./api/helpers/response');
+let config;
 
 async.series([
   function setupConfig(callback) {
@@ -66,6 +66,7 @@ async.series([
         }
       }
     });
+    //TODO: error
     mongoose.connection
       .on('connected', () => {
         logger.info('Mongoose connection open to', mongodbList[config.get('DB_LOCATION')]);
@@ -75,6 +76,7 @@ async.series([
       });
     callback();
   },
+  //TODO: res, error
   function startServer(callback) {
     app.listen(config.get('NODE_PORT'));
     callback();

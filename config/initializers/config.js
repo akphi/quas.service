@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('nconf');
+let config = require('nconf');
 require('dotenv').load();
 config.use('memory')
   .argv()

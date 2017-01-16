@@ -1,8 +1,8 @@
 'use strict';
 
-var moment = require('moment');
-var message = require('../language/en/error');
+let message = require('../language/en/error');
 
+//TODO think of smart error message
 module.exports = (res, data, statusCode, code, field) => {
   if (data) {
     // SUCESS

@@ -1,14 +1,20 @@
 'use strict';
 
-var router = require('express').Router()
-var config = require('../../../../config/initializers/config');
-var User = require('../../../models/user');
-var logger = require('../../../helpers/logger')('CONTROLLER');
+let router = require('express').Router()
+let config = require('../../../../config/initializers/config');
+let User = require('../../../models/user');
+let logger = require('../../../helpers/logger')('CONTROLLER');
 
 router.route('/')
   .get((req, res) => {
-    User.find({}, (err, users) => {
-      res.json(users);
+    //TODO: name, sanitize
+    User.find({}, (errDB, users) => {
+      //TODO: res
+      if (errDB) {
+        res.send(errDB);
+      } else {
+        res.json(users);
+      }
     });
   })
 

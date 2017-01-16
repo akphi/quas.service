@@ -1,9 +1,9 @@
 'use strict';
 
-var crypto = require('crypto');
+let crypto = require('crypto');
 
 // larger numbers mean better security, less
-var config = {
+let config = {
   // size of the generated hash
   hashBytes: 32,
   // larger salt means hashed passwords are more resistant to rainbow table, but
@@ -39,7 +39,7 @@ function hashPassword(password, callback) {
           return callback(err);
         }
 
-        var combined = new Buffer(hash.length + salt.length + 8);
+        let combined = new Buffer(hash.length + salt.length + 8);
 
         // include the size of the salt so that we can, during verification,
         // figure out how much of the hash is salt
@@ -68,11 +68,11 @@ function hashPassword(password, callback) {
  */
 function verifyPassword(password, combined, callback) {
   // extract the salt and hash from the combined buffer
-  var saltBytes = combined.readUInt32BE(0);
-  var hashBytes = combined.length - saltBytes - 8;
-  var iterations = combined.readUInt32BE(4);
-  var salt = combined.slice(8, saltBytes + 8);
-  var hash = combined.toString('binary', saltBytes + 8);
+  let saltBytes = combined.readUInt32BE(0);
+  let hashBytes = combined.length - saltBytes - 8;
+  let iterations = combined.readUInt32BE(4);
+  let salt = combined.slice(8, saltBytes + 8);
+  let hash = combined.toString('binary', saltBytes + 8);
 
   // verify the salt and hash against the password
   crypto.pbkdf2(password, salt, iterations, hashBytes, config.algorithm, function (err, verify) {

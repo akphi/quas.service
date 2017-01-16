@@ -1,32 +1,66 @@
 'use strict';
 
-var router = require('express').Router()
-var config = require('../../../../config/initializers/config');
-var User = require('../../../models/user');
-var logger = require('../../../helpers/logger')('CONTROLLER');
-var password = require('../../../helpers/password');
+let router = require('express').Router()
+let dbSanitizer = require('mongo-sanitize');
+
+let User = require('../../../models/user');
+let config = require('../../../../config/initializers/config');
+let logger = require('../../../helpers/logger')('CONTROLLER');
+let password = require('../../../helpers/password');
+let validator = require('../../../validators/user');
+let constants = require('../../../constants/user');
 
 router.route('/')
 
+  //TODO: fix this method
   .get((req, res) => {
-    User.find({}, function (err, users) {
-      res.json(users);
+    User.find({}, function (errDB, users) {
+      if (errDB) {
+        res.send(errDB);
+      } else {
+        res.json(users);
+      }
     });
   })
 
   .post((req, res) => {
-    password.hashPassword(req.body.password, (err, combined) => {
-      var nick = new User({
-        name: req.body.name,
-        password: combined.toString('base64'),
-        role: 1
-      });
-      nick.save(function (err) {
-        if (err) throw err;
-        console.log('User saved successfully');
-        res.json({ success: true });
-      });
+    User.findOne({
+      name: dbSanitizer(req.body.name)
+    }, (errDB, user) => {
+      if (errDB) {
+        //TODO: res
+        res.send(errDB);
+      } else {
+        if (user) {
+          //TODO: res
+          res.status(400).send({
+            success: false, message: 'User already existed.'
+          });
+        } else {
+          //TODO: validator
+          let validationResults = validator(req,res);
+          console.log(validationResults);
+          password.hashPassword(req.body.password, (errHashPassword, combined) => {
+            //TODO: handle errHashPassword with 500?
+            let user = new User({
+              name: req.body.name,
+              password: combined.toString('base64'),
+              //TODO: role?
+              role: constants.USER_ROLE,
+            });
+            user.save(function (errDB) {
+              if (errDB) {
+                //TODO: res
+                res.send(errDB);
+              } else {
+                //TODO: res
+                res.json({ success: true });
+              }
+            });
+          });
+        }
+      }
     });
   });
 
-module.exports = router
+module.exports = router;

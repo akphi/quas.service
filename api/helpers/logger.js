@@ -1,8 +1,8 @@
 'use strict';
 
-var moment = require('moment');
-var winston = require('winston');
-var split = require('split');
+let moment = require('moment');
+let winston = require('winston');
+let split = require('split');
 module.exports = (label) => {
   winston.loggers.add(label, {
     file: {

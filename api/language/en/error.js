@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: just this class?
 module.exports = {
   'TK001': 'Your account has been logged out',
   'TK002': 'Token is expired',

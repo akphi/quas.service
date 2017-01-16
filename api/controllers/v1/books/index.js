@@ -1,8 +1,8 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var logger = require('../../../helpers/logger')('ROUTER');
+let express = require('express');
+let router = express.Router();
+let logger = require('../../../helpers/logger')('ROUTER');
 
 router.use('/', require('./books'));
 router.use('/:book_id', require('./book'));
