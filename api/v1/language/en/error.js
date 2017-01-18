@@ -4,6 +4,7 @@ module.exports = {
 
   // General
   "RC001": 'Success',
+  "500": 'Internal Server Error',
 
   // Token
   'TK001': 'Your account has been logged out',

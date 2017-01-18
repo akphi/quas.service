@@ -1,8 +1,8 @@
 'usestrict';
 
-let config = require('../../../config/initializers/config');
+let config = require('../../../setup/config');
 let corser = require('corser');
-let logger = require('../helpers/logger')('MIDDLEWARE');
+let logger = require('../../../setup/logger')('MIDDLEWARE');
 let jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 let response = require('../helpers/response');
 

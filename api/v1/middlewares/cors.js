@@ -1,8 +1,8 @@
 'use strict';
 
-let config = require('../../../config/initializers/config');
+let config = require('../../../setup/config');
 let corser = require('corser');
-let logger = require('../helpers/logger')('MIDDLEWARE');
+let logger = require('../../../setup/logger')('MIDDLEWARE');
 
 
 // // Customize Method

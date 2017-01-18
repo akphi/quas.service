@@ -1,20 +1,16 @@
 'use strict';
 
-// CONFIG
-// =============================================================================
 let express = require('express');
 let app = express();
 let router = require('./api');
 let async = require('async');
 let bodyParser = require('body-parser');
-let logger = require('./api/v1/helpers/logger')('APP');
+let logger = require('./setup/logger')('APP');
 let config;
-
-
 
 async.series([
   function setupConfig(callback) {
-    config = require('./config/initializers/config');
+    config = require('./setup/config');
     callback();
   },
   function setupRouterAndMiddleware(callback) {
@@ -27,56 +23,27 @@ async.series([
       extended: true
     }));
     app.use(bodyParser.json());
-    app.use('/api', router);
     callback();
   },
-  function setupDocs(callback) {
-    callback();
-  },
-  function initializeDBConnection(callback) {
-    let mongoose = require('mongoose');
-    let mongodbList = {
-      local: 'mongodb://localhost/quas-db',
-      remote: 'mongodb://test:test@ds033126.mlab.com:33126/quas-test'
-    }
-    mongoose.Promise = global.Promise;
-    mongoose.connect(mongodbList[config.get('DB_LOCATION')], {
-      server: {
-        socketOptions: {
-          keepAlive: Number(config.get('DB_KEEPALIVE')),
-          connectTimeoutMS: Number(config.get('DB_TIMEOUT'))
-        }
-      },
-      replset: {
-        socketOptions: {
-          keepAlive: Number(config.get('DB_KEEPALIVE')),
-          connectTimeoutMS: Number(config.get('DB_TIMEOUT'))
-        }
-      }
-    });
-    //TODO: error
-    mongoose.connection
-      .on('connected', () => {
-        logger.info('Mongoose connection open to', mongodbList[config.get('DB_LOCATION')]);
-      })
-      .on('error', (error) => {
-        logger.error('Mongoose connection error: ', error);
-      });
-    callback();
-  },
-  //TODO: res, error
   function startServer(callback) {
     app.listen(config.get('NODE_PORT'));
     callback();
-  }], function (err) {
-    if (err) {
-      logger.error('Initialization failed', err);
-    } else {
-      logger.info('Initialized SUCCESSFULLY');
-    }
+  },
+  function initializeDBConnection(callback) {
+    require('./setup/database')(callback);
+  },
+], function (err) {
+  if (err) {
+    logger.error('Initialization FAILED', err);
+    app.route('*').all(function (req, res) {
+      res.status(503);
+      res.send('Server is currently unavailable or under maintenance.');
+    })
+    
+  } else {
+    logger.info('Initialization COMPLETED');
+    app.use('/api', router);
   }
-);
+});
 
-// SETUP TESTING
-// =============================================================================
 module.exports = app;

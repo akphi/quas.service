@@ -4,8 +4,8 @@ let router = require('express').Router()
 let dbSanitizer = require('mongo-sanitize');
 
 let User = require('../../models/user');
-let config = require('../../../../config/initializers/config');
-let logger = require('../../helpers/logger')('CONTROLLER');
+let config = require('../../../../setup/config');
+let logger = require('../../../../setup/logger')('CONTROLLER');
 let password = require('../../helpers/password');
 let validator = require('../../validators/user');
 let constants = require('../../constants/user');
