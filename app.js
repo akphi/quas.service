@@ -4,13 +4,13 @@
 // =============================================================================
 let express = require('express');
 let app = express();
-let router = require('./api/controllers');
+let router = require('./api');
 let async = require('async');
 let bodyParser = require('body-parser');
-let path = require('path');
-let logger = require('./api/helpers/logger')('APP');
-let response = require('./api/helpers/response');
+let logger = require('./api/v1/helpers/logger')('APP');
 let config;
+
+
 
 async.series([
   function setupConfig(callback) {
@@ -31,18 +31,6 @@ async.series([
     callback();
   },
   function setupDocs(callback) {
-    let SwaggerExpress = require('swagger-express-mw');
-    let SwaggerUi = require('swagger-tools/middleware/swagger-ui');
-    SwaggerExpress.create({
-      appRoot: __dirname,
-    }, function (err, swaggerExpress) {
-      if (err) { throw err; }
-      // Add swagger-ui (This must be before swaggerExpress.register)
-      app.use(SwaggerUi(swaggerExpress.runner.swagger, { apiDocs: '/api/api-docs', swaggerUi: '/api/docs' }));
-      // Install middleware
-      swaggerExpress.register(app);
-      logger.info('Initialize Swagger');
-    });
     callback();
   },
   function initializeDBConnection(callback) {
