@@ -3,22 +3,22 @@
 let config = require('./config');
 let logger = require('./logger')('DATABASE');
 let mongoose = require('mongoose');
-let mongodbList = {
-  local: 'mongodb://localhost/quas-db',
-  remote: 'mongodb://test:test@ds033126.mlab.com:33126/quas-test'
-}
 
 module.exports = function (callback) {
   mongoose.Promise = global.Promise;
-  mongoose.connect(mongodbList[config.get('DB_LOCATION')], {
+  mongoose.connect(config.get('DB_LOCATION'), {
+    reconnectTries: Number.MAX_VALUE, // Unlimited amount of time within connection time-out
+    reconnectInterval: Number(config.get('DB_RECONNECT_INTERVAL')),
     server: {
       socketOptions: {
+        autoReconnect: true,
         keepAlive: Number(config.get('DB_KEEPALIVE')),
         connectTimeoutMS: Number(config.get('DB_TIMEOUT'))
       }
     },
     replset: {
       socketOptions: {
+        autoReconnect: true,
         keepAlive: Number(config.get('DB_KEEPALIVE')),
         connectTimeoutMS: Number(config.get('DB_TIMEOUT'))
       }
@@ -26,7 +26,7 @@ module.exports = function (callback) {
   });
   mongoose.connection
     .on('connected', () => {
-      logger.info('Mongoose connection open to', mongodbList[config.get('DB_LOCATION')]);
+      logger.info('Mongoose connection open to', config.get('DB_LOCATION'));
       callback();
     })
     .on('error', (error) => {
