@@ -42,6 +42,6 @@
     "init_db": "sudo mongod --dbpath ../db",
     "init_cache": "sudo redis-server",
     "start": "node app.js",
-    "watch": "onchange '.' -- npm run start"
+    "watch": "onchange '**/*.js' -i -- npm run start"
   }
 }

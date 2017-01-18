@@ -1,7 +1,7 @@
 'use strict';
 
 let router = require('express').Router();
-let logger = require('../../helpers/logger')('ROUTER');
+let logger = require('../../../../setup/logger')('ROUTER');
 
 router.use('/', require('./users'));
 router.use('/login', require('./login'));

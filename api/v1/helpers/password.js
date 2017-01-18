@@ -49,7 +49,6 @@ function hashPassword(password, callback) {
 
         salt.copy(combined, 8);
         hash.copy(combined, salt.length + 8);
-        console.log(combined);
         callback(null, combined);
       });
   });
@@ -84,5 +83,5 @@ function verifyPassword(password, combined, callback) {
   });
 }
 
-exports.hashPassword = hashPassword;
-exports.verifyPassword = verifyPassword;
+module.exports.hashPassword = hashPassword;
+module.exports.verifyPassword = verifyPassword;
