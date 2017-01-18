@@ -5,7 +5,11 @@ module.exports = {
 
   // General
   "RC001": 'Success',
-  "500": 'Internal Server Error',
+
+  "SV001": 'Internal server error',
+
+  "DB001": 'Database error',
+  "DB002": 'Database connection failure',
 
   // Token
   'TK001': 'Token is invalid',

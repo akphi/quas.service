@@ -30,6 +30,7 @@ module.exports = function (callback) {
       callback();
     })
     .on('error', (error) => {
-      callback(new Error(error));
+      logger.info('Mongoose connection error' , error);
+      callback(new Error("DATABASE"));
     });
 }

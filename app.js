@@ -35,11 +35,21 @@ async.series([
 ], function (err) {
   if (err) {
     logger.error('Initialization FAILED', err);
-    app.route('*').all(function (req, res) {
-      res.status(503);
-      res.send('Server is currently unavailable or under maintenance.');
+    if (err.message === "DATABASE") {
+      app.route('*').all(function (req, res) {
+      res.status(503).json({
+        code: "DB001",
+        message: "Database Conection Failure",
+      });
     })
-    
+    } else {
+    app.route('*').all(function (req, res) {
+      res.status(500).json({
+        code: "SV001",
+        message: "Internal Server Error",
+      });
+    })
+    }
   } else {
     logger.info('Initialization COMPLETED');
     app.use('/api', router);

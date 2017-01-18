@@ -4,11 +4,13 @@ let router = require('express').Router()
 let dbSanitizer = require('mongo-sanitize');
 
 let User = require('../../models/user');
-let config = require('../../../../setup/config');
 let logger = require('../../../../setup/logger')('CONTROLLER');
 let password = require('../../helpers/password');
 let validator = require('../../validators/user');
 let constants = require('../../constants/user');
+
+let response = require('../../helpers/response');
+let error = require('../../constants/error');
 
 router.route('/')
 
@@ -28,38 +30,56 @@ router.route('/')
       name: dbSanitizer(req.body.name)
     }, (errDB, user) => {
       if (errDB) {
-        //TODO: res
-        res.send(errDB);
+        logger.error("DATABASE: ", errDB);
+        response(res, {
+          status: 503,
+          error: error.DATABASE,
+        });
       } else {
         if (user) {
-          //TODO: res
-          res.status(400).send({
-            success: false, message: 'User already existed.'
+          logger.error("User already existed");
+          response(res, {
+            status: 503,
+            error: error.DATABASE,
           });
         } else {
-          //TODO: validator
-          let validationResults = validator(req,res);
-          if(Object.keys(validationResults).length !== 0 || validationResults.constructor !== Object) {
-            //TODO: res
-            res.json({ error: validationResults });
+          let validationResults = validator(req);
+          if (Object.keys(validationResults).length !== 0 || validationResults.constructor !== Object) {
+            response(res, {
+              status: 400,
+              error: error.VALIDATION,
+              field: validationResults,
+            });
           } else {
             password.hashPassword(req.body.password, (errHashPassword, combined) => {
-              //TODO: handle errHashPassword with 500?
-              let user = new User({
-                name: req.body.name,
-                password: combined.toString('base64'),
-                //TODO: role?
-                role: constants.USER_ROLE,
-              });
-              user.save(function (errDB) {
-                if (errDB) {
-                  //TODO: res
-                  res.send(errDB);
-                } else {
-                  //TODO: res
-                  res.json({ success: true });
-                }
-              });
+              if (errHashPassword) {
+                logger.error("SERVER: cannot hash password - ", errHashPassword);
+                response(res, {
+                  status: 500,
+                  error: error.SERVER,
+                });
+              } else {
+                let user = new User({
+                  username: req.body.username,
+                  password: combined.toString('base64'),
+                  role: constants.USER_ROLE,
+                });
+                user.save(function (errDB) {
+                  if (errDB) {
+                    logger.error("DATABASE: cannot persist user - ", errDB);
+                    response(res, {
+                      status: 503,
+                      error: error.DATABASE,
+                    });
+                  } else {
+                    logger.info("User is created and persisted");
+                    response(res, {
+                      status: 200,
+                      error: error.SUCCESS,
+                    });
+                  }
+                });
+              }
             });
           }
         }
