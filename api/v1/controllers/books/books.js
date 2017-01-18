@@ -18,7 +18,7 @@ router.route('/')
     });
   })
 
-  .post((req, res) => {
+  .post(require('../../middlewares/authentication'), (req, res) => {
     //TODO: validation
     let book = new Book();
     book.name = req.body.name;

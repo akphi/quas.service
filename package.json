@@ -7,7 +7,7 @@
   "author": "Quan Vu, An Phi",
   "license": "",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "main": "app.js",
   "dependencies": {

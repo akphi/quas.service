@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: general
 module.exports = {
 
   // General
@@ -7,10 +8,8 @@ module.exports = {
   "500": 'Internal Server Error',
 
   // Token
-  'TK001': 'Your account has been logged out',
-  'TK002': 'Token has expired',
-  'TK003': 'Token is invalid',
-  'TK004': 'Token is required',
+  'TK001': 'Token is invalid',
+  'TK002': 'Token is required',
 
   'US001': 'This username is already taken',
   'US002': 'User',

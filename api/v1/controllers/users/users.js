@@ -39,7 +39,7 @@ router.route('/')
         } else {
           //TODO: validator
           let validationResults = validator(req,res);
-          if(Object.keys(validationResults).length === 0 && validationResults.constructor === Object) {
+          if(Object.keys(validationResults).length !== 0 || validationResults.constructor !== Object) {
             //TODO: res
             res.json({ error: validationResults });
           } else {
