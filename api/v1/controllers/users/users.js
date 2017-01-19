@@ -16,7 +16,7 @@ router.route('/')
 
   //TODO: fix this method
   .get((req, res) => {
-    User.find({}, function (errDB, users) {
+    User.find({}, (errDB, users) => {
       if (errDB) {
         res.send(errDB);
       } else {
@@ -26,62 +26,38 @@ router.route('/')
   })
 
   .post((req, res) => {
-    User.findOne({
-      name: dbSanitizer(req.body.name)
-    }, (errDB, user) => {
-      if (errDB) {
-        logger.error("DATABASE: ", errDB);
-        response(res, {
-          status: 503,
-          error: error.DATABASE,
+    validator.registration(req, (errValidation, result) => {
+      if (errValidation) {
+        logger.error("SERVER: validation failure", errValidation);
+        response.error(res, {
+          status: 500,
+          error: error.VALIDATION_SERVER_FAILURE,
         });
       } else {
-        if (user) {
-          logger.error("User already existed");
-          response(res, {
-            status: 503,
-            error: error.DATABASE,
-          });
+        if (Object.keys(result).length !== 0 || result.constructor !== Object) {
+          response.errorValidation(res, result);
         } else {
-          let validationResults = validator(req);
-          if (Object.keys(validationResults).length !== 0 || validationResults.constructor !== Object) {
-            response(res, {
-              status: 400,
-              error: error.VALIDATION,
-              field: validationResults,
-            });
-          } else {
-            password.hashPassword(req.body.password, (errHashPassword, combined) => {
-              if (errHashPassword) {
-                logger.error("SERVER: cannot hash password - ", errHashPassword);
-                response(res, {
-                  status: 500,
-                  error: error.SERVER,
-                });
-              } else {
-                let user = new User({
-                  username: req.body.username,
-                  password: combined.toString('base64'),
-                  role: constants.USER_ROLE,
-                });
-                user.save(function (errDB) {
-                  if (errDB) {
-                    logger.error("DATABASE: cannot persist user - ", errDB);
-                    response(res, {
-                      status: 503,
-                      error: error.DATABASE,
-                    });
-                  } else {
-                    logger.info("User is created and persisted");
-                    response(res, {
-                      status: 200,
-                      error: error.SUCCESS,
-                    });
-                  }
-                });
-              }
-            });
-          }
+          password.hashPassword(req.body.password, (errHashPassword, combined) => {
+            if (errHashPassword) {
+              logger.error("SERVER: cannot hash password - ", errHashPassword);
+              response.errorServer(res);
+            } else {
+              let user = new User({
+                username: req.body.username,
+                password: combined.toString('base64'),
+                role: constants.USER_ROLE,
+              });
+              user.save((errDB) => {
+                if (errDB) {
+                  logger.error("DATABASE: cannot persist user - ", errDB);
+                  response.errorDatabase(res);
+                } else {
+                  logger.info("DATABASE: user is persisted");
+                  response.success(res);
+                }
+              });
+            }
+          });
         }
       }
     });

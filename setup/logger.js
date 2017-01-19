@@ -64,6 +64,6 @@ let trafficTracker = new winston.Logger({
   exitOnError: false
 });
 
-module.exports.stream = split().on('data', function (message) {
+module.exports.stream = split().on('data', (message) => {
   trafficTracker.info(message)
 })

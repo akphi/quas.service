@@ -4,7 +4,7 @@ let config = require('./config');
 let logger = require('./logger')('DATABASE');
 let mongoose = require('mongoose');
 
-module.exports = function (callback) {
+module.exports = (callback) => {
   mongoose.Promise = global.Promise;
   mongoose.connect(config.get('DB_LOCATION'), {
     reconnectTries: Number.MAX_VALUE, // Unlimited amount of time within connection time-out

@@ -28,13 +28,13 @@ let config = {
  */
 function hashPassword(password, callback) {
   // generate a salt for pbkdf2
-  crypto.randomBytes(config.saltBytes, function (err, salt) {
+  crypto.randomBytes(config.saltBytes, (err, salt) => {
     if (err) {
       return callback(err);
     }
 
     crypto.pbkdf2(password, salt, config.iterations, config.hashBytes, config.algorithm,
-      function (err, hash) {
+      (err, hash) => {
         if (err) {
           return callback(err);
         }
@@ -74,7 +74,7 @@ function verifyPassword(password, combined, callback) {
   let hash = combined.toString('binary', saltBytes + 8);
 
   // verify the salt and hash against the password
-  crypto.pbkdf2(password, salt, iterations, hashBytes, config.algorithm, function (err, verify) {
+  crypto.pbkdf2(password, salt, iterations, hashBytes, config.algorithm, (err, verify) => {
     if (err) {
       return callback(err, false);
     }

@@ -17,4 +17,7 @@ module.exports = {
 
   'US001': 'This username is already taken',
   'US002': 'User',
+
+  "VA001": "Validation failed",
+  "VA002": "Validation service is currently not working",
 }
