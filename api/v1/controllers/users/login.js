@@ -39,7 +39,7 @@ router.route('/')
               res.status(200).send({
                 success: true,
                 message: 'Enjoy your token!',
-                token: 'Bearer' + ' ' + token
+                token: `Bearer ${token}`,
               });
             } else {
               //TODO: res
