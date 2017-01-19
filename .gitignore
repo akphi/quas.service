@@ -5,5 +5,7 @@
 dump.rdb
 database.sqlite
 /node_modules
-**/*.log
-**/*.log.*
+log/*.log
+*.log
+npm-debug.log*
+
