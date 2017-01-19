@@ -4,23 +4,23 @@ let dbSanitizer = require('mongo-sanitize');
 let mustache = require('mustache');
 let validator = require('validator');
 
-let validateLength = (req, attributeName, error, bound, message, callback) => {
+let validateLength = (errorValidation, req, schema, attributeName, result, bound, message, callback) => {
   if (bound.min && bound.max) {
     if (req.body[attributeName].length < bound.min || req.body[attributeName].length > bound.max) {
-      error.push(mustache.render(message, {
+      result.push(mustache.render(message, {
         minLength: bound.min,
         maxLength: bound.max,
       }));
     }
   } else if (!bound.min) {
     if (req.body[attributeName].length > bound.max) {
-      error.push(mustache.render(message, {
+      result.push(mustache.render(message, {
         maxLength: bound.max,
       }));
     }
   } else if (!bound.max) {
     if (req.body[attributeName].length < bound.min) {
-      error.push(mustache.render(message, {
+      result.push(mustache.render(message, {
         minLength: bound.min,
       }));
     }
@@ -28,7 +28,7 @@ let validateLength = (req, attributeName, error, bound, message, callback) => {
   callback();
 }
 
-let validateDuplication = (req, schema, attributeName, error, errorValidation, message, callback) => {
+let validateDuplication = (errorValidation, req, schema, attributeName, result, message, callback) => {
   let query = new Object();
   query[attributeName] = dbSanitizer(req.body[attributeName]);
   schema.findOne(query, (errDB, user) => {
@@ -36,37 +36,36 @@ let validateDuplication = (req, schema, attributeName, error, errorValidation, m
       errorValidation = new Error(errDB);
     } else {
       if (user) {
-        error.push(message);
+        result.push(message);
       }
     }
     callback();
   });
 }
 
-let validationEmpty = (req, attributeName, errorList, message) => {
+let validationEmpty = (req, attributeName, result, message) => {
   if (!req.body[attributeName] || validator.isEmpty(req.body[attributeName])) {
-    errorList.push(message);
+    result.push(message);
     return true;
   }
   return false;
 }
 
-let validateMatch = (req, attributeName, errorList, patterns, message, callback) => {
+let validateMatch = (errorValidation, req, schema, attributeName, result, patterns, message, callback) => {
   var matchResult = patterns.map((pattern) => {
-    console.log(pattern);
     return validator.matches(req.body[attributeName], pattern);
   }).reduce(function (a, b) {
     return (a && b);
   }, true);
   if (!matchResult) {
-    errorList.push(message);
+    result.push(message);
   }
   callback();
 }
 
-let appendResult = (result, attributeName, errorList) => {
-  if (errorList.length !== 0) {
-    result[attributeName] = errorList;
+let appendResult = (results, attributeName, result) => {
+  if (result.length !== 0) {
+    results[attributeName] = result;
   }
 }
 
