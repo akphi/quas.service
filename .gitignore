@@ -2,9 +2,8 @@
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
 /build
-/log/*.log
 dump.rdb
 database.sqlite
 /node_modules
-ncp-debug.log
-npm-debug.log
+**/*.log
+**/*.log.*

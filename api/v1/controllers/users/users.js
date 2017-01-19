@@ -27,7 +27,7 @@ router.route('/')
 
   .post((req, res) => {
     validator.registration(req, (errValidation, result) => {
-      if (errValidation) {
+      if (Object.keys(errValidation).length !== 0 || errValidation.constructor !== Object) {
         logger.error("SERVER: validation failure", errValidation);
         response.error(res, {
           status: 500,
