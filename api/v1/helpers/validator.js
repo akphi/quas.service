@@ -3,32 +3,33 @@
 let dbSanitizer = require('mongo-sanitize');
 let mustache = require('mustache');
 let validator = require('validator');
+let message = require('../language/en/validation/general');
 
-let validateLength = (errorValidation, req, schema, attributeName, result, bound, message, callback) => {
-  if (bound.min && bound.max) {
-    if (req.body[attributeName].length < bound.min || req.body[attributeName].length > bound.max) {
-      result.push(mustache.render(message, {
-        minLength: bound.min,
-        maxLength: bound.max,
+let validateLength = (errorValidation, req, schema, attributeName, result, options, callback) => {
+  if (options.values.min && options.values.max) {
+    if (req.body[attributeName].length < options.values.min || req.body[attributeName].length > options.values.max) {
+      result.push(mustache.render(options.message, {
+        min: options.values.min,
+        max: options.values.max,
       }));
     }
-  } else if (!bound.min) {
-    if (req.body[attributeName].length > bound.max) {
-      result.push(mustache.render(message, {
-        maxLength: bound.max,
+  } else if (!options.values.min) {
+    if (req.body[attributeName].length > options.values.max) {
+      result.push(mustache.render(options.message, {
+        maxLength: options.values.max,
       }));
     }
-  } else if (!bound.max) {
-    if (req.body[attributeName].length < bound.min) {
-      result.push(mustache.render(message, {
-        minLength: bound.min,
+  } else if (!options.values.max) {
+    if (req.body[attributeName].length < options.values.min) {
+      result.push(mustache.render(options.message, {
+        minLength: options.values.min,
       }));
     }
   }
   callback();
 }
 
-let validateDuplication = (errorValidation, req, schema, attributeName, result, message, callback) => {
+let validateDuplication = (errorValidation, req, schema, attributeName, result, options, callback) => {
   let query = new Object();
   query[attributeName] = dbSanitizer(req.body[attributeName]);
   schema.findOne(query, (errDB, user) => {
@@ -36,29 +37,29 @@ let validateDuplication = (errorValidation, req, schema, attributeName, result, 
       errorValidation = new Error(errDB);
     } else {
       if (user) {
-        result.push(message);
+        result.push(options.message);
       }
     }
     callback();
   });
 }
 
-let validationEmpty = (req, attributeName, result, message) => {
+let validationEmpty = (req, attributeName, result, options = {}) => {
   if (!req.body[attributeName] || validator.isEmpty(req.body[attributeName])) {
-    result.push(message);
+    result.push(options ? options.message : message.REQUIRED);
     return true;
   }
   return false;
 }
 
-let validateMatch = (errorValidation, req, schema, attributeName, result, patterns, message, callback) => {
-  var matchResult = patterns.map((pattern) => {
+let validateMatch = (errorValidation, req, schema, attributeName, result, options, callback) => {
+  var matchResult = options.values.patterns.map((pattern) => {
     return validator.matches(req.body[attributeName], pattern);
   }).reduce(function (a, b) {
     return (a && b);
   }, true);
   if (!matchResult) {
-    result.push(message);
+    result.push(options.message);
   }
   callback();
 }

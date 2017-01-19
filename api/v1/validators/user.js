@@ -2,8 +2,6 @@
 
 let async = require('async');
 let validator = require('validator');
-
-let User = require('../models/user');
 let errorMessage = require('../language/en/validation/user');
 let constants = require('../constants/user');
 let validatorHelper = require('../helpers/validator');
@@ -12,17 +10,11 @@ let registration = (req, callbackValidation) => {
     let errorValidation;
     let resultValidation = {};
     async.parallel([
-        (callbackD) => {
-            validateUsername(req, resultValidation, errorValidation, callbackD);
+        (callback) => {
+            validateAttribute(req, resultValidation, errorValidation, USERNAME, callback);
         },
-        // password
-        (callbackPassword) => {
-            let passwordError = [];
-            if (!req.body.password || validator.isEmpty(req.body.password)) {
-                passwordError.push(errorMessage.PASSWORD_EMPTY);
-            }
-            validatorHelper.appendResult(resultValidation, "password", passwordError);
-            callbackPassword();
+        (callback) => {
+            validateAttribute(req, resultValidation, errorValidation, PASSWORD, callback);
         },
     ], (err) => {
         if (err) {
@@ -33,28 +25,86 @@ let registration = (req, callbackValidation) => {
     });
 };
 
-let validateUsername = (req, result, error, callbackGroup) => {
-    let usernameError = [];
-    if (!validatorHelper.validationEmpty(req, "username", usernameError, errorMessage.USERNAME_EMPTY)) {
-        async.series([
-            (callback) => {
-                validatorHelper.validateLength(error, req, User, "username", usernameError, {
-                    min: constants.USERNAME_MIN_LENGTH,
-                    max: constants.USERNAME_MAX_LENGTH,
-                }, errorMessage.USERNAME_LENGTH, callback);
-            },
-            (callback) => { validatorHelper.validateDuplication(error, req, User, "username", usernameError, errorMessage.USERNAME_DUPLICATED, callback); },
-            (callback) => { validatorHelper.validateMatch(error, req, User, "username", usernameError, [new RegExp("^(?![_.])"), new RegExp("[^_.]$")], errorMessage.USERNAME_RULE_3, callback) },
-            (callback) => { validatorHelper.validateMatch(error, req, User, "username", usernameError, [new RegExp("^(?!.*[_.]{2})$")], errorMessage.USERNAME_RULE_2, callback) },
-            (callback) => { validatorHelper.validateMatch(error, req, User, "username", usernameError, [new RegExp("^[a-zA-Z0-9._]+$")], errorMessage.USERNAME_RULE_1, callback) },
-        ], () => {
-            validatorHelper.appendResult(result, "username", usernameError);
-            callbackGroup();
-        });
+let validateAttribute = (req, result, error, options, callbackRootValidator) => {
+    let errorList = [];
+    if (options.required) {
+        if (!validatorHelper.validationEmpty(req, options.name, errorList, options.required_option)) {
+            async.series(options.validator.map((option) => {
+                return (callback) => { validatorHelper[option.function](error, req, options.schema, options.name, errorList, option, callback) };
+            }), () => {
+                validatorHelper.appendResult(result, options.name, errorList);
+                callbackRootValidator();
+            });
+        } else {
+            validatorHelper.appendResult(result, options.name, errorList);
+            callbackRootValidator();
+        }
     } else {
-        validatorHelper.appendResult(result, "username", usernameError);
-        callbackGroup();
+        async.series(options.validator.map((option) => {
+            return (callback) => { validatorHelper[option.function](error, req, options.schema, options.name, errorList, option, callback) };
+        }), () => {
+            validatorHelper.appendResult(result, options.name, errorList);
+            callbackRootValidator();
+        });
     }
 };
+
+const PASSWORD = {
+    name: "password",
+    required: {
+        value: true
+    },
+    schema: require('../models/user'),
+    validator: [{
+        function: "validateLength",
+        message: errorMessage.PASSWORD_LENGTH,
+        values: {
+            min: constants.PASSWORD_MIN_LENGTH,
+            max: constants.PASSWORD_MAX_LENGTH,
+        }
+    }]
+}
+
+const USERNAME = {
+    name: "username",
+    required: {
+        value: true
+    },
+    schema: require('../models/user'),
+    validator: [{
+        function: "validateLength",
+        message: errorMessage.USERNAME_LENGTH,
+        values: {
+            min: constants.USERNAME_MIN_LENGTH,
+            max: constants.USERNAME_MAX_LENGTH,
+        }
+    },
+    {
+        function: "validateDuplication",
+        message: errorMessage.USERNAME_DUPLICATED,
+        values: {}
+    },
+    {
+        function: "validateMatch",
+        message: errorMessage.USERNAME_RULE_1,
+        values: {
+            patterns: [new RegExp("^[a-zA-Z0-9._]+$")]
+        }
+    },
+    {
+        function: "validateMatch",
+        message: errorMessage.USERNAME_RULE_2,
+        values: {
+            patterns: [new RegExp("^(?!.*[_.]{2})$")]
+        }
+    },
+    {
+        function: "validateMatch",
+        message: errorMessage.USERNAME_RULE_3,
+        values: {
+            patterns: [new RegExp("^(?![_.])"), new RegExp("[^_.]$")]
+        }
+    }]
+}
 
 module.exports = { registration };
