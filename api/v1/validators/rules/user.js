@@ -48,7 +48,7 @@ const USER_USERNAME = {
     function: "MATCH",
     message: errorMessage.USERNAME_RULE_2,
     values: {
-      patterns: [new RegExp("^(?!.*[_.]{2})$")]
+      patterns: [new RegExp("(?!.*[_.]{2})")]
     }
   },
   {
