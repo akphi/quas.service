@@ -7,6 +7,7 @@ module.exports = {
   RC000: undefined,
 
   SV001: "Internal server error",
+  SV002: "Not Found",
 
   DB001: "Database error",
   DB002: "Database connection failure",

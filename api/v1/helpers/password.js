@@ -26,7 +26,7 @@ let config = {
  * @param {!String} password
  * @param {!function(?Error, ?Buffer=)} callback
  */
-function hashPassword(password, callback) {
+let hashPassword = (password, callback) => {
   // generate a salt for pbkdf2
   crypto.randomBytes(config.saltBytes, (err, salt) => {
     if (err) {
@@ -65,7 +65,7 @@ function hashPassword(password, callback) {
  *   hashPassword.
  * @param {!function(?Error, !boolean)}
  */
-function verifyPassword(password, combined, callback) {
+let verifyPassword = (password, combined, callback) => {
   // extract the salt and hash from the combined buffer
   let saltBytes = combined.readUInt32BE(0);
   let hashBytes = combined.length - saltBytes - 8;
@@ -83,5 +83,4 @@ function verifyPassword(password, combined, callback) {
   });
 }
 
-module.exports.hashPassword = hashPassword;
-module.exports.verifyPassword = verifyPassword;
+module.exports = { hashPassword, verifyPassword };

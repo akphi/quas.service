@@ -15,34 +15,34 @@ let response = (req, res, defaults, options = {}) => {
 
 let error = (req, res, options = {}) => {
   response(req, res, {
-    status: "400",
+    status: 400,
   }, options)
 };
 
 let success = (req, res, options = {}) => {
   response(req, res, {
-    status: "200",
+    status: 200,
     code: errorCode.SUCCESS,
   }, options)
 };
 
 let errorServer = (req, res, options = {}) => {
   response(req, res, {
-    status: "500",
+    status: 500,
     code: errorCode.SERVER,
   }, options)
 };
 
 let errorDatabase = (req, res, options = {}) => {
   response(req, res, {
-    status: "500",
+    status: 500,
     code: errorCode.DATABASE,
   }, options)
 };
 
 let errorValidation = (req, res, options = {}) => {
   response(req, res, {
-    status: "400",
+    status: 400,
     code: errorCode.VALIDATION,
   }, options)
 };

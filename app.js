@@ -9,11 +9,11 @@ let logger = require('./setup/logger')('APP');
 let config;
 
 async.series([
-  function setupConfig(callback) {
+  (callback) => {
     config = require('./setup/config');
     callback();
   },
-  function setupRouterAndMiddleware(callback) {
+  (callback) => {
     let helmet = require('helmet');
     app.use(helmet());
     app.disable('x-powered-by');
@@ -24,26 +24,26 @@ async.series([
     app.use(bodyParser.json());
     callback();
   },
-  function startServer(callback) {
+  (callback) => {
     app.listen(config.get('NODE_PORT'));
     callback();
   },
-  function initializeDBConnection(callback) {
+  (callback) => {
     require('./setup/database')(callback);
   },
-], function (err) {
+], (err) => {
   if (err) {
     logger.error('Initialization FAILED', err);
     if (err.message === "DATABASE_UNAVAILABLE") {
-      app.route('*').all(function (req, res) {
-        res.status(503).json({
+      app.route('*').all((req, res) => {
+        res.status(500).json({
           code: "DB001",
           message: "Database is currently unavailable.",
         });
       })
     } else {
-      app.route('*').all(function (req, res) {
-        res.status(503).json({
+      app.route('*').all((req, res) => {
+        res.status(500).json({
           code: "SV001",
           message: "Internal Server Error",
         });
@@ -52,6 +52,12 @@ async.series([
   } else {
     logger.info('Initialization COMPLETED');
     app.use('/api', router);
+    app.use('*', (req, res) => {
+      res.status(404).json({
+        code: "SV002",
+        message: "Not Found",
+      });
+    });
   }
 });
 

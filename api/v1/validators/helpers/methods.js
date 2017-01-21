@@ -54,7 +54,7 @@ const REQUIRE = (req, attributeName, result, options = {}) => {
 const MATCH = (error, req, attributeName, result, options, callback) => {
   var matchResult = options.values.patterns.map((pattern) => {
     return validator.matches(req.body[attributeName], pattern);
-  }).reduce(function (a, b) {
+  }).reduce((a, b) => {
     return (a && b);
   }, true);
   if (!matchResult) {
