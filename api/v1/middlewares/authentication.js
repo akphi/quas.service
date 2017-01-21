@@ -9,23 +9,25 @@ let response = require('../helpers/response');
 module.exports = (req, res, next) => {
   let token = req.body.token || req.query.token || req.headers['authorization'];
   if (token) {
-    jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decoded) => {
+    jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decodedToken) => {
       if (err) {
         // Token is invalid or validation failed.
         return response.error(req, res, {
-          status: "401",
+          status: "400",
           error: error.TOKEN_INVALID,
         });
       } else {
         // Token is valid, authentication succeeded.
-        req.decoded = decoded;
+        req.decodedToken = decodedToken;
+        //TODO: 
+        console.log(decodedToken);
         next();
       }
     });
   } else {
     // Token is missing.
     return response.error(req, res, {
-      status: "401",
+      status: "400",
       error: error.TOKEN_MISSING,
     });
   }

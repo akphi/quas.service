@@ -63,4 +63,25 @@ const MATCH = (error, req, attributeName, result, options, callback) => {
   callback();
 }
 
-module.exports = { LENGTH, DUPLICATION, REQUIRE, MATCH };
+const CONTAIN = (error, req, attributeName, result, options, callback) => {
+  var matchResult = options.values.patterns.map((pattern) => {
+    return validator.contains(req.body[attributeName], pattern);
+  }).reduce((a, b) => {
+    if (options.values.exclusion) {
+      return (a || b);
+    }
+    return (a && b);
+  }, (options.values.exclusion ? false : true));
+  if (options.values.exclusion) {
+    if (matchResult) {
+      result.push(options.message ? options.message : "EXCLUDE");
+    }
+  } else {
+    if (!matchResult) {
+      result.push(options.message ? options.message : "INCLUDE");
+    }
+  }
+  callback();
+}
+
+module.exports = { LENGTH, DUPLICATION, REQUIRE, MATCH, CONTAIN };

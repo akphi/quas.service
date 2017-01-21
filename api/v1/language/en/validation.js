@@ -4,6 +4,8 @@ module.exports = {
 
   REQUIRED: "This field is required",
   MISMATCH: "The input does not match required format",
+  INCLUDE: "The input does not include required characters",
+  EXCLUDE: "The input contains invalid characters",
   LENGTH_BOUNDED: "Length must be between {{min}} and {{max}} characters",
   LENGTH_LOWER: "Length must be greater than {{min}} characters",
   LENGTH_UPPER: "Length must be less than {{max}} characters",

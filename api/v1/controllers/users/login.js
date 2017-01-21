@@ -33,7 +33,7 @@ router.route('/')
                   role: user.role
                 }
               }, config.get('NODE_JWT_SECRET'), {
-                  expiresIn: 86400 // expires in 24 hours
+                  expiresIn: Number(config.get('NODE_JWT_EXPIRE')) // expires in 24 hours
                 });
                 //TODO: res
               res.status(200).send({
