@@ -40,22 +40,24 @@ const USER_USERNAME = {
     function: "MATCH",
     message: "USER_USERNAME_RULE_1",
     values: {
-      patterns: [new RegExp("^[a-zA-Z0-9._]+$")]
+      exclusion: false,
+      patterns: [/^[a-zA-Z0-9._]+$/]
     }
   },
   {
-    function: "CONTAIN",
+    function: "MATCH",
     message: "USER_USERNAME_RULE_2",
     values: {
       exclusion: true,
-      patterns: ["_.", "._", "..", "__"]
+      patterns: [/[_.]{2,}/]
     }
   },
   {
     function: "MATCH",
     message: "USER_USERNAME_RULE_3",
     values: {
-      patterns: [new RegExp("^(?![_.])"), new RegExp("[^_.]$")]
+      exclusion: false,
+      patterns: [/^([^_.])/, /[^_.]$/]
     }
   }]
 }

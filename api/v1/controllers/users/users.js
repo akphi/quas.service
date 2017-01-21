@@ -4,7 +4,7 @@ let router = require('express').Router()
 let dbSanitizer = require('mongo-sanitize');
 
 let User = require('../../models/user');
-let logger = require('../../helpers/logger')('CONTROLLER');
+let logger = require('../../../../setup/logger').api('CONTROLLER');
 let password = require('../../helpers/password');
 let validator = require('../../validators/models/user');
 let constants = require('../../constants/user');
@@ -26,6 +26,9 @@ router.route('/')
   })
 
   .post((req, res) => {
+    //TODO: get rid of this
+    // console.log(logger);
+    // logger.error("SERVER: validation failure");
     validator.registration(req, (errValidation, result) => {
       if (Object.keys(errValidation).length !== 0 || errValidation.constructor !== Object) {
         logger.error("SERVER: validation failure", errValidation);

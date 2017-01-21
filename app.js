@@ -5,7 +5,7 @@ let app = express();
 let router = require('./api');
 let async = require('async');
 let bodyParser = require('body-parser');
-let logger = require('./setup/logger')('APP');
+let logger = require('./setup/logger').server('APP');
 let config;
 
 async.series([

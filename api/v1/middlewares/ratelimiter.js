@@ -1,7 +1,7 @@
 'use strict';
 
 let config = require('../../../setup/config');
-let logger = require('../helpers/logger')('MIDDLEWARE');
+let logger = require('../../../setup/logger').api('MIDDLEWARE');
 let RateLimit = require('express-rate-limit');
 let RedisStore = require('rate-limit-redis');
 

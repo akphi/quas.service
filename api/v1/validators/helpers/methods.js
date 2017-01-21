@@ -1,28 +1,36 @@
 'use strict';
 
 let dbSanitizer = require('mongo-sanitize');
-let mustache = require('mustache');
 let validator = require('validator');
 
 const LENGTH = (error, req, attributeName, result, options, callback) => {
   if (options.values.min && options.values.max) {
     if (req.body[attributeName].length < options.values.min || req.body[attributeName].length > options.values.max) {
-      result.push(mustache.render(options.message ? options.message : "LENGTH_BOUNDED", {
-        min: options.values.min,
-        max: options.values.max,
-      }));
+      result.push({
+        code: (options.message ? options.message : "LENGTH_BOUNDED"),
+        params: {
+          min: options.values.min,
+          max: options.values.max,
+        }
+      });
     }
   } else if (!options.values.min) {
     if (req.body[attributeName].length > options.values.max) {
-      result.push(mustache.render(options.message ? options.message : "LENGTH_UPPER", {
-        max: options.values.max,
-      }));
+      result.push({
+        code: (options.message ? options.message : "LENGTH_UPPER"),
+        params: {
+          max: options.values.max,
+        }
+      });
     }
   } else if (!options.values.max) {
     if (req.body[attributeName].length < options.values.min) {
-      result.push(mustache.render(options.message ? options.message : "LENGTH_LOWER", {
-        min: options.values.min,
-      }));
+      result.push({
+        code: (options.message ? options.message : "LENGTH_LOWER"),
+        params: {
+          min: options.values.min,
+        }
+      });
     }
   }
   callback();
@@ -55,10 +63,15 @@ const MATCH = (error, req, attributeName, result, options, callback) => {
   var matchResult = options.values.patterns.map((pattern) => {
     return validator.matches(req.body[attributeName], pattern);
   }).reduce((a, b) => {
+    if (options.values.exclusion) {
+      return (a || b);
+    }
     return (a && b);
-  }, true);
-  if (!matchResult) {
-    result.push(options.message ? options.message : "MISMATCH");
+  }, (options.values.exclusion ? false : true));
+  if (!(options.values.exclusion ^ matchResult)) {
+    if (matchResult) {
+      result.push(options.message ? options.message : "MISMATCH");
+    }
   }
   callback();
 }

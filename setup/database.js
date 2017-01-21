@@ -1,7 +1,7 @@
 'use strict';
 
 let config = require('./config');
-let logger = require('./logger')('DATABASE');
+let logger = require('./logger').server('DATABASE');
 let mongoose = require('mongoose');
 
 module.exports = (callback) => {

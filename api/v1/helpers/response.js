@@ -7,7 +7,7 @@ let response = (req, res, defaults, options = {}) => {
   let status = options.status ? options.status : defaults.status;
   return res.status(status).json({
     code: (options.error ? options.error : defaults.code),
-    message: (options.message ? options.message : defaults.code ? message.error(req, errorCode[defaults.code]) : message.error(req, options.error)),
+    message: (options.message ? options.message : message.error(req, (defaults.code ? defaults.code : options.error))),
     field: (options.field ? message.validation(req, options.field) : undefined),
     data: (options.data ? options.data : undefined),
   });
