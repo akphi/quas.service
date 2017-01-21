@@ -26,20 +26,6 @@ let success = (req, res, options = {}) => {
   }, options)
 };
 
-let errorServer = (req, res, options = {}) => {
-  response(req, res, {
-    status: 500,
-    code: errorCode.SERVER,
-  }, options)
-};
-
-let errorDatabase = (req, res, options = {}) => {
-  response(req, res, {
-    status: 500,
-    code: errorCode.DATABASE,
-  }, options)
-};
-
 let errorValidation = (req, res, options = {}) => {
   response(req, res, {
     status: 400,
@@ -47,4 +33,4 @@ let errorValidation = (req, res, options = {}) => {
   }, options)
 };
 
-module.exports = { error, success, errorDatabase, errorServer, errorValidation };
+module.exports = { error, success, errorValidation };

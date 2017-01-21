@@ -29,10 +29,7 @@ router.route('/')
     validator.registration(req, (errValidation, result) => {
       if (Object.keys(errValidation).length !== 0 || errValidation.constructor !== Object) {
         logger.error("SERVER: validation failure", errValidation);
-        response.error(req, res, {
-          status: 500,
-          error: error.VALIDATION_SERVER_FAILURE,
-        });
+        res.status(500).json({});
       } else {
         if (Object.keys(result).length !== 0 || result.constructor !== Object) {
           response.errorValidation(req, res, { field: result });
@@ -40,7 +37,7 @@ router.route('/')
           password.hashPassword(req.body.password, (errHashPassword, combined) => {
             if (errHashPassword) {
               logger.error("SERVER: cannot hash password - ", errHashPassword);
-              response.errorServer(req, res);
+              res.status(500).json({});
             } else {
               let user = new User({
                 username: req.body.username,
@@ -50,7 +47,7 @@ router.route('/')
               user.save((errDB) => {
                 if (errDB) {
                   logger.error("DATABASE: cannot persist user - ", errDB);
-                  response.errorDatabase(req, res);
+                  res.status(500).json({});
                 } else {
                   logger.info("DATABASE: user is persisted");
                   response.success(req, res);

@@ -11,23 +11,29 @@ module.exports = (req, res, next) => {
   if (token) {
     jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decodedToken) => {
       if (err) {
-        // Token is invalid or validation failed.
-        return response.error(req, res, {
-          status: "400",
-          error: error.TOKEN_INVALID,
-        });
+        if (err.name == "TokenExpiredError") {
+          // Token has expired
+          return response.error(req, res, {
+            status: "401",
+            error: error.TOKEN_EXPIRED,
+          });
+        } else {
+          // Token is invalid or validation failed.
+          return response.error(req, res, {
+            status: "401",
+            error: error.TOKEN_INVALID,
+          });
+        }
       } else {
         // Token is valid, authentication succeeded.
         req.decodedToken = decodedToken;
-        //TODO: 
-        console.log(decodedToken);
         next();
       }
     });
   } else {
     // Token is missing.
     return response.error(req, res, {
-      status: "400",
+      status: "401",
       error: error.TOKEN_MISSING,
     });
   }

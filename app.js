@@ -34,29 +34,14 @@ async.series([
 ], (err) => {
   if (err) {
     logger.error('Initialization FAILED', err);
-    if (err.message === "DATABASE_UNAVAILABLE") {
-      app.route('*').all((req, res) => {
-        res.status(500).json({
-          code: "DB001",
-          message: "Database is currently unavailable.",
-        });
-      })
-    } else {
-      app.route('*').all((req, res) => {
-        res.status(500).json({
-          code: "SV001",
-          message: "Internal Server Error",
-        });
-      })
-    }
+    app.route('*').all((req, res) => {
+      res.status(500).json({});
+    })
   } else {
     logger.info('Initialization COMPLETED');
     app.use('/api', router);
     app.use('*', (req, res) => {
-      res.status(404).json({
-        code: "SV002",
-        message: "Not Found",
-      });
+      res.status(404).json({});
     });
   }
 });
