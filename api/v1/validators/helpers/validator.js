@@ -13,15 +13,15 @@ let appendResult = (results, attributeName, result) => {
 }
 
 const validateObject = (req, callbackMain, option) => {
-  let errorValidation = {};
+  let error = {};
   let resultValidation = {};
   async.parallel(option.field.map((attribute) => {
-    return (callback) => { validateAttribute(req, resultValidation, errorValidation, rule[attribute], callback); }
-  }), (error) => {
-    if (error) {
-      errorValidation.push(new Error(error));
+    return (callback) => { validateAttribute(req, resultValidation, error, rule[attribute], callback); }
+  }), (errorAsync) => {
+    if (errorAsync) {
+      error.push(new Error(errorAsync));
     }
-    callbackMain(errorValidation, resultValidation);
+    callbackMain(error, resultValidation);
   });
 };
 

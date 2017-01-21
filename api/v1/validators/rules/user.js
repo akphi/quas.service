@@ -1,6 +1,5 @@
 'use strict';
 
-let errorMessage = require('../../language/en/validation/user');
 let constants = require('../../constants/user');
 
 const USER_PASSWORD = {
@@ -32,28 +31,28 @@ const USER_USERNAME = {
   },
   {
     function: "DUPLICATION",
-    message: errorMessage.USERNAME_DUPLICATED,
+    message: "USER_USERNAME_DUPLICATED",
     values: {
       schema: require('../../models/user')
     }
   },
   {
     function: "MATCH",
-    message: errorMessage.USERNAME_RULE_1,
+    message: "USER_USERNAME_RULE_1",
     values: {
       patterns: [new RegExp("^[a-zA-Z0-9._]+$")]
     }
   },
   {
     function: "MATCH",
-    message: errorMessage.USERNAME_RULE_2,
+    message: "USER_USERNAME_RULE_2",
     values: {
       patterns: [new RegExp("(?!.*[_.]{2})")]
     }
   },
   {
     function: "MATCH",
-    message: errorMessage.USERNAME_RULE_3,
+    message: "USER_USERNAME_RULE_3",
     values: {
       patterns: [new RegExp("^(?![_.])"), new RegExp("[^_.]$")]
     }

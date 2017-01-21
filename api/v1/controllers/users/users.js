@@ -6,7 +6,7 @@ let dbSanitizer = require('mongo-sanitize');
 let User = require('../../models/user');
 let logger = require('../../../../setup/logger')('CONTROLLER');
 let password = require('../../helpers/password');
-let validator = require('../../validators/user');
+let validator = require('../../validators/models/user');
 let constants = require('../../constants/user');
 
 let response = require('../../helpers/response');
@@ -29,18 +29,18 @@ router.route('/')
     validator.registration(req, (errValidation, result) => {
       if (Object.keys(errValidation).length !== 0 || errValidation.constructor !== Object) {
         logger.error("SERVER: validation failure", errValidation);
-        response.error(res, {
+        response.error(req, res, {
           status: 500,
           error: error.VALIDATION_SERVER_FAILURE,
         });
       } else {
         if (Object.keys(result).length !== 0 || result.constructor !== Object) {
-          response.errorValidation(res, result);
+          response.errorValidation(req, res, { field: result });
         } else {
           password.hashPassword(req.body.password, (errHashPassword, combined) => {
             if (errHashPassword) {
               logger.error("SERVER: cannot hash password - ", errHashPassword);
-              response.errorServer(res);
+              response.errorServer(req, res);
             } else {
               let user = new User({
                 username: req.body.username,
@@ -50,10 +50,10 @@ router.route('/')
               user.save((errDB) => {
                 if (errDB) {
                   logger.error("DATABASE: cannot persist user - ", errDB);
-                  response.errorDatabase(res);
+                  response.errorDatabase(req, res);
                 } else {
                   logger.info("DATABASE: user is persisted");
-                  response.success(res);
+                  response.success(req, res);
                 }
               });
             }

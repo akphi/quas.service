@@ -35,20 +35,20 @@ async.series([
 ], function (err) {
   if (err) {
     logger.error('Initialization FAILED', err);
-    if (err.message === "DATABASE") {
+    if (err.message === "DATABASE_UNAVAILABLE") {
       app.route('*').all(function (req, res) {
-      res.status(503).json({
-        code: "DB001",
-        message: "Database Conection Failure",
-      });
-    })
+        res.status(503).json({
+          code: "DB001",
+          message: "Database is currently unavailable.",
+        });
+      })
     } else {
-    app.route('*').all(function (req, res) {
-      res.status(500).json({
-        code: "SV001",
-        message: "Internal Server Error",
-      });
-    })
+      app.route('*').all(function (req, res) {
+        res.status(503).json({
+          code: "SV001",
+          message: "Internal Server Error",
+        });
+      })
     }
   } else {
     logger.info('Initialization COMPLETED');
