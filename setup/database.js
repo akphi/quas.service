@@ -26,11 +26,11 @@ module.exports = (callback) => {
   });
   mongoose.connection
     .on('connected', () => {
-      logger.info('Mongoose connection open to', config.get('DB_LOCATION'));
+      logger.info('DATABASE connection established to ', config.get('DB_LOCATION'));
       callback();
     })
     .on('error', (error) => {
-      logger.info('Mongoose connection error' , error);
+      logger.info('DATABASE connection failed ', error);
       callback();
     });
 }

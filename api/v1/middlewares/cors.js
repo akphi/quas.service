@@ -2,7 +2,7 @@
 
 let config = require('../../../setup/config');
 let corser = require('corser');
-let logger = require('../../../setup/logger')('MIDDLEWARE');
+let logger = require('../helpers/logger')('MIDDLEWARE');
 
 // // Customize Method
 // module.exports = (req, res, next) => {
