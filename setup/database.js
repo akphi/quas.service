@@ -31,6 +31,6 @@ module.exports = (callback) => {
     })
     .on('error', (error) => {
       logger.info('Mongoose connection error' , error);
-      callback(new Error("DATABASE"));
+      callback(new Error("DATABASE_UNAVAILABLE"));
     });
 }

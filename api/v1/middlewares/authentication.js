@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     jwt.verify(token, config.get('NODE_JWT_SECRET'), (err, decoded) => {
       if (err) {
         // Token is invalid or validation failed.
-        return response.error(res, {
+        return response.error(req, res, {
           status: "400",
           error: error.TOKEN_INVALID,
         });
@@ -24,7 +24,7 @@ module.exports = (req, res, next) => {
     });
   } else {
     // Token is missing.
-    return response.error(res, {
+    return response.error(req, res, {
       status: "400",
       error: error.TOKEN_MISSING,
     });
