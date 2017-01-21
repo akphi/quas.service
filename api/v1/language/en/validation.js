@@ -9,7 +9,7 @@ module.exports = {
   LENGTH_UPPER: "Length must be less than {{max}} characters",
 
   USER_USERNAME_DUPLICATED: "Username is already taken",
-  USER_USERNAME_RULE_1: "A-Za-z0-9_. are allowed",
-  USER_USERNAME_RULE_2: "_ and . are not allowed to stay near one another",
-  USER_USERNAME_RULE_3: "_ and . are not allowed at either ends",
+  USER_USERNAME_RULE_1: "Only A-Z, a-z, 0-9 and special characters _ . are allowed",
+  USER_USERNAME_RULE_2: "Special characters _ . are not allowed to stay near one another",
+  USER_USERNAME_RULE_3: "Special characters _ . are not allowed at either ends",
 }

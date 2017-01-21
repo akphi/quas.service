@@ -17,7 +17,6 @@ async.series([
     let helmet = require('helmet');
     app.use(helmet());
     app.disable('x-powered-by');
-
     app.use(express.static('public'));
     app.use(bodyParser.urlencoded({
       extended: true

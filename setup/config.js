@@ -11,7 +11,9 @@ let settings = {
 
   CORS_DOMAINS: [process.env.NODE_HOST],
   CORS_METHODS: ['GET', 'POST', 'PUT', 'DELETE'],
-  CORS_HEADERS: ['authorization', 'content-type', 'x-language'], //React frontend only allow lowercase custom headers
+  //React frontend only allow lowercase custom headers
+  //NodeJS also use lowercase: http://stackoverflow.com/questions/40700283/how-to-get-response-header-in-node-js
+  CORS_HEADERS: ['authorization', 'content-type', 'x-language'],
   CORS_END_PREFLIGHT: true,
 };
 

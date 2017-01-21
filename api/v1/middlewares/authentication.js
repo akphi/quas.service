@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
       if (err) {
         // Token is invalid or validation failed.
         return response.error(req, res, {
-          status: "400",
+          status: "401",
           error: error.TOKEN_INVALID,
         });
       } else {
@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
   } else {
     // Token is missing.
     return response.error(req, res, {
-      status: "400",
+      status: "401",
       error: error.TOKEN_MISSING,
     });
   }
