@@ -7,7 +7,7 @@ let error = (req, message) => {
   if (message.params) {
     return mustache.render(require('./' + (req.headers["x-language"] ? req.headers["x-language"] : config.get("LANGUAGE_DEFAULT")) + '/error')[message.code], message.params);
   }
-  return require('./' + (req.headers["x-language"] ? req.headers["x-language"] : config.get("LANGUAGE_DEFAULT")) + '/error')[messages];
+  return require('./' + (req.headers["x-language"] ? req.headers["x-language"] : config.get("LANGUAGE_DEFAULT")) + '/error')[message];
 };
 
 let validation = (req, errors) => {
