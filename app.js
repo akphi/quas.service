@@ -11,9 +11,6 @@ let config;
 async.series([
   (callback) => {
     config = require('./setup/config');
-    callback();
-  },
-  (callback) => {
     let helmet = require('helmet');
     app.use(helmet());
     app.disable('x-powered-by');
@@ -22,9 +19,6 @@ async.series([
       extended: true
     }));
     app.use(bodyParser.json());
-    callback();
-  },
-  (callback) => {
     app.listen(config.get('NODE_PORT'));
     callback();
   },

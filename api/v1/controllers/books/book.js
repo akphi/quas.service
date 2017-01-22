@@ -2,7 +2,7 @@
 
 let router = require('express').Router()
 let Book = require('../../models/book');
-let logger = require('../../../../setup/logger').api('CONTROLLER');
+let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 
 router.route('/')
 

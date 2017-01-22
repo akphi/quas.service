@@ -5,7 +5,14 @@ let moment = require('moment');
 let winston = require('winston');
 let split = require('split');
 let config = require('./config');
+let mkdirp = require('mkdirp');
 
+let directories = {
+  server: './log/server/',
+  api: './log/api/',
+  traffic: './log/traffic/',
+  exception: './log/exception/',
+}
 let fileTransport = (name, level, label, dirname, filename, dailyRotateOptions, maxsize = config.get('LOGGER_MAX_SIZE'), maxFiles = config.get('LOGGER_MAX_FILES')) => {
   return new winston.transports.DailyRotateFile({
     name: name,
@@ -47,7 +54,7 @@ let consoleTransport = (name, level, label, formatter = (options) => {
 let serverLogger = (label) => {
   winston.loggers.add(label, {
     transports: [
-      fileTransport('server-file-log', 'info', label, './log/server/', '.log', {
+      fileTransport('server-file-log', 'info', label, directories.server, '.log', {
         datePattern: 'yyyy-MM-dd',
         prepend: true
       }),
@@ -57,10 +64,15 @@ let serverLogger = (label) => {
   return winston.loggers.get(label);
 };
 
-let apiLogger = (label, version = "v1") => {
+let apiLogger = (label, version = "undefined") => {
+  mkdirp(directories.api + version, function (errMkdirp) {
+    if (errMkdirp) {
+      serverLogger("APP").error("Cannot create directory for api " + version);
+    }
+  });
   winston.loggers.add(label, {
     transports: [
-      fileTransport('api-file-log', 'info', label, ('./log/api/' + version + '/'), '.log', {
+      fileTransport('api-file-log', 'info', label, (directories.api + version + '/'), '.log', {
         datePattern: 'yyyy-MM-dd',
         prepend: true
       }),
@@ -72,7 +84,7 @@ let apiLogger = (label, version = "v1") => {
 
 let trafficTracker = new winston.Logger({
   transports: [
-    fileTransport('traffic-file-log', 'info', 'TRAFFIC', './log/traffic/', '.log', {
+    fileTransport('traffic-file-log', 'info', 'TRAFFIC', directories.traffic, '.log', {
       datePattern: 'yyyy-MM-dd',
       prepend: true
     }),
@@ -82,7 +94,7 @@ let trafficTracker = new winston.Logger({
 });
 
 winston.handleExceptions([
-  fileTransport('exception-file-log', undefined, undefined, './log/exception/', '.log', {
+  fileTransport('exception-file-log', undefined, undefined, directories.exception, '.log', {
     datePattern: 'yyyy-MM-dd',
     prepend: true
   }),

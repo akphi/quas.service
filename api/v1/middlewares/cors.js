@@ -2,7 +2,7 @@
 
 let config = require('../../../setup/config');
 let corser = require('corser');
-let logger = require('../../../setup/logger').api('MIDDLEWARE');
+let logger = require('../../../setup/logger').api('MIDDLEWARE', 'v1');
 
 // // Customize Method
 // module.exports = (req, res, next) => {
