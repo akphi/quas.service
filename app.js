@@ -8,9 +8,9 @@ let router = require('./api');
 let logger = require('./setup/logger').server('APP');
 let loggerMessage = require('./constants/logger');
 let config = require('./setup/config');
-let workersNumber = config.get('NODE_CORE_WORKERS_NUMBER') || require('os').cpus().length;
 
 if (cluster.isMaster) {
+  let workersNumber = config.get('NODE_CORE_WORKERS_SIZE') || require('os').cpus().length;
   for (let i = 0; i < workersNumber; ++i) {
     logger.info(loggerMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
   }

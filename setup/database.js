@@ -11,6 +11,7 @@ module.exports = (callback) => {
     reconnectTries: Number.MAX_VALUE, // Unlimited amount of time within connection time-out
     reconnectInterval: Number(config.get('DB_RECONNECT_INTERVAL')),
     server: {
+      poolSize: config.get('DB_POOL_SIZE'),
       socketOptions: {
         autoReconnect: true,
         keepAlive: Number(config.get('DB_KEEPALIVE')),
@@ -18,6 +19,7 @@ module.exports = (callback) => {
       }
     },
     replset: {
+      poolSize: config.get('DB_POOL_SIZE'),
       socketOptions: {
         autoReconnect: true,
         keepAlive: Number(config.get('DB_KEEPALIVE')),
