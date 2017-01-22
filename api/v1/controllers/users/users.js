@@ -26,9 +26,7 @@ router.route('/')
   })
 
   .post((req, res) => {
-    //TODO: get rid of this
-    // console.log(logger);
-    // logger.error("SERVER: validation failure");
+    logger.error("SERVER: validation failure");
     validator.registration(req, (errValidation, result) => {
       if (Object.keys(errValidation).length !== 0 || errValidation.constructor !== Object) {
         logger.error("SERVER: validation failure", errValidation);
