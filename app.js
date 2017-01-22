@@ -6,6 +6,7 @@ let router = require('./api');
 let async = require('async');
 let bodyParser = require('body-parser');
 let logger = require('./setup/logger').server('APP');
+let loggerMessage = require('./constants/logger');
 let config;
 
 async.series([
@@ -25,14 +26,14 @@ async.series([
   (callback) => {
     require('./setup/database')(callback);
   },
-], (err) => {
-  if (err) {
-    logger.error('Initialization FAILED', err);
+], (error) => {
+  if (error) {
+    logger.error(loggerMessage.INITIALIZATION_FAILURE, error);
     app.route('*').all((req, res) => {
       res.status(500).json({});
     })
   } else {
-    logger.info('Initialization COMPLETED');
+    logger.info(loggerMessage.INITIALIZATION_SUCCESS);
     app.use('/api', router);
     app.use('*', (req, res) => {
       res.status(404).json({});

@@ -1,8 +1,9 @@
 'use strict';
 
 let config = require('./config');
-let logger = require('./logger').server('DATABASE');
 let mongoose = require('mongoose');
+let logger = require('./logger').server('DATABASE');
+let loggerMessage = require('../constants/logger');
 
 module.exports = (callback) => {
   mongoose.Promise = global.Promise;
@@ -26,11 +27,11 @@ module.exports = (callback) => {
   });
   mongoose.connection
     .on('connected', () => {
-      logger.info('DATABASE connection established to ', config.get('DB_LOCATION'));
+      logger.info(loggerMessage.DATABASE_CONNECTION_SUCCESS, config.get('DB_LOCATION'));
       callback();
     })
     .on('error', (error) => {
-      logger.info('DATABASE connection failed ', error);
+      logger.info(loggerMessage.DATABASE_CONNECTION_FAILURE, error);
       callback();
     });
 }

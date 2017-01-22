@@ -6,6 +6,7 @@ let winston = require('winston');
 let split = require('split');
 let config = require('./config');
 let mkdirp = require('mkdirp');
+let loggerMessage = require('../constants/logger');
 
 let directories = {
   server: './log/server/',
@@ -67,7 +68,7 @@ let serverLogger = (label) => {
 let apiLogger = (label, version = "undefined") => {
   mkdirp(directories.api + version, function (errMkdirp) {
     if (errMkdirp) {
-      serverLogger("APP").error("Cannot create directory for api " + version);
+      serverLogger("APP").error(loggerMessage.DIRECTORY_CREATION_FAILURE, version);
     }
   });
   winston.loggers.add(label, {
