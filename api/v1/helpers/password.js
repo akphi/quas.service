@@ -1,20 +1,21 @@
 'use strict';
 
 let crypto = require('crypto');
+let config = require('../../../setup/config');
 
 // larger numbers mean better security, less
-let config = {
+let params = {
   // size of the generated hash
-  hashBytes: 32,
+  hashBytes: Number(config.get('PASSWORDHASHER_HASHBYTES')),
   // larger salt means hashed passwords are more resistant to rainbow table, but
   // you get diminishing returns pretty fast
-  saltBytes: 16,
+  saltBytes: Number(config.get('PASSWORDHASHER_SALTBYTES')),
   // more iterations means an attacker has to take longer to brute force an
   // individual password, so larger is better. however, larger also means longer
   // to hash the password. tune so that hashing the password takes about a
   // second
-  iterations: 842464,
-  algorithm: 'sha512'
+  iterations: Number(config.get('PASSWORDHASHER_ITERATIONS')),
+  algorithm: config.get('PASSWORDHASHER_ALGORITHM'),
 };
 
 /**
@@ -27,25 +28,24 @@ let config = {
  * @param {!function(?Error, ?Buffer=)} callback
  */
 let hashPassword = (password, callback) => {
-  // generate a salt for pbkdf2
-  crypto.randomBytes(config.saltBytes, (err, salt) => {
-    if (err) {
-      return callback(err);
+  crypto.randomBytes(params.saltBytes, (errHashPassword, salt) => {
+    if (errHashPassword) {
+      return callback(errHashPassword);
     }
 
-    crypto.pbkdf2(password, salt, config.iterations, config.hashBytes, config.algorithm,
-      (err, hash) => {
-        if (err) {
-          return callback(err);
+    crypto.pbkdf2(password, salt, params.iterations, params.hashBytes, params.algorithm,
+      (errCrypto, hash) => {
+        if (errCrypto) {
+          return callback(errCrypto);
         }
 
-        let combined = new Buffer(hash.length + salt.length + 8);
+        let combined = Buffer.alloc(hash.length + salt.length + 8);
 
         // include the size of the salt so that we can, during verification,
         // figure out how much of the hash is salt
         combined.writeUInt32BE(salt.length, 0, true);
         // similarly, include the iteration count
-        combined.writeUInt32BE(config.iterations, 4, true);
+        combined.writeUInt32BE(params.iterations, 4, true);
 
         salt.copy(combined, 8);
         hash.copy(combined, salt.length + 8);
@@ -74,7 +74,7 @@ let verifyPassword = (password, combined, callback) => {
   let hash = combined.toString('binary', saltBytes + 8);
 
   // verify the salt and hash against the password
-  crypto.pbkdf2(password, salt, iterations, hashBytes, config.algorithm, (err, verify) => {
+  crypto.pbkdf2(password, salt, iterations, hashBytes, params.algorithm, (err, verify) => {
     if (err) {
       return callback(err, false);
     }

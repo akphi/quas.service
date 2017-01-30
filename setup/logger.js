@@ -59,7 +59,7 @@ let serverLogger = (label) => {
         datePattern: 'yyyy-MM-dd',
         prepend: true
       }),
-      consoleTransport('server-console-log', (process.env.NODE_ENV === 'development' ? 'debug' : 'info'), label)
+      consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label)
     ],
   });
   return winston.loggers.get(label);
@@ -77,7 +77,7 @@ let apiLogger = (label, version = "undefined") => {
         datePattern: 'yyyy-MM-dd',
         prepend: true
       }),
-      consoleTransport('server-console-log', (process.env.NODE_ENV === 'development' ? 'debug' : 'info'), label)
+      consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label)
     ],
   });
   return winston.loggers.get(label);
@@ -89,7 +89,7 @@ let trafficTracker = new winston.Logger({
       datePattern: 'yyyy-MM-dd',
       prepend: true
     }),
-    consoleTransport('traffic-console-log', (process.env.NODE_ENV === 'development' ? 'debug' : 'info'), 'TRAFFIC', undefined)
+    consoleTransport('traffic-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), 'TRAFFIC', undefined)
     // Formatting will be taken care by morgan
   ],
 });

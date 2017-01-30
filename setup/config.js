@@ -9,7 +9,7 @@ let settings = {
 
   LANGUAGE_DEFAULT: "en",
 
-  CORS_DOMAINS: [process.env.NODE_HOST],
+  CORS_DOMAINS: ['http://localhost:8080'],
   CORS_METHODS: ['GET', 'POST', 'PUT', 'DELETE'],
   //React frontend only allow lowercase custom headers
   //NodeJS also use lowercase: http://stackoverflow.com/questions/40700283/how-to-get-response-header-in-node-js
