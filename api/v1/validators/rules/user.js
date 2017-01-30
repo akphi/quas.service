@@ -4,10 +4,8 @@ let constants = require('../../constants/user');
 
 const USER_PASSWORD = {
   name: "password",
-  required: {
-    value: true,
-    function: "REQUIRE",
-  },
+  type: "string",
+  required: true,
   validator: [{
     function: "LENGTH",
     values: {
@@ -18,10 +16,8 @@ const USER_PASSWORD = {
 
 const USER_USERNAME = {
   name: "username",
-  required: {
-    value: true,
-    function: "REQUIRE",
-  },
+  type: "string",
+  required: true,
   validator: [{
     function: "LENGTH",
     values: {
@@ -41,7 +37,7 @@ const USER_USERNAME = {
     message: "USER_USERNAME_RULE_1",
     values: {
       exclusion: false,
-      patterns: [/^[a-zA-Z0-9._]+$/]
+      patterns: [/^[a-zA-Z0-9\._]+$/]
     }
   },
   {

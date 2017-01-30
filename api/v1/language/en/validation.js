@@ -3,6 +3,7 @@
 module.exports = {
 
   REQUIRED: "This field is required",
+  TYPE: "This field must be of type {{type}}",
   MISMATCH: "The input does not match required format",
   INCLUDE: "The input does not include required characters",
   EXCLUDE: "The input contains invalid characters",

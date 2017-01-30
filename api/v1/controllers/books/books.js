@@ -1,12 +1,19 @@
 'use strict';
 
-let router = require('express').Router()
+let router = require('express').Router();
+let dbSanitizer = require('mongo-sanitize');
+
 let Book = require('../../models/book');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
+let loggerMessage = require('../../constants/logger');
+let validator = require('../../validators/models/book');
+let constants = require('../../constants/book');
+let response = require('../../helpers/response');
+let error = require('../../constants/error');
 
 router.route('/')
 
-  .get((req, res) => {
+  .get((req, res, next) => {
     //TODO: Rewrite find, sanitize name
     Book.find((errDB, books) => {
       //TODO: res
@@ -18,14 +25,15 @@ router.route('/')
     });
   })
 
-  .post(require('../../middlewares/authentication'), (req, res) => {
+  .post(require('../../middlewares/authentication'), (req, res, next) => {
     //TODO: validation
-    let book = new Book();
-    book.name = req.body.name;
-    book.edition = req.body.edition;
-    book.author = req.body.author;
-    book.publisher = req.body.publisher;
-    book.isbn = req.body.isbn;
+    let book = new Book({
+      name: req.body.name,
+      edition: req.body.edition,
+      author: req.body.author,
+      publisher: req.body.publisher,
+      isbn: req.body.isbn,
+    });
     book.save((errDB) => {
       //TODO: res
       if (errDB) {

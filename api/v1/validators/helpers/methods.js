@@ -2,6 +2,7 @@
 
 let dbSanitizer = require('mongo-sanitize');
 let validator = require('validator');
+let utils = require('../../helpers/utils');
 
 const LENGTH = (error, req, attributeName, result, options, callback) => {
   if (options.values.min && options.values.max) {
@@ -52,11 +53,26 @@ const DUPLICATION = (error, req, attributeName, result, options, callback) => {
 }
 
 const REQUIRE = (req, attributeName, result, options = {}) => {
-  if (!req.body[attributeName] || validator.isEmpty(req.body[attributeName])) {
+  if (!req.body[attributeName]
+    || ((req.body[attributeName]).hasOwnProperty('length') && req.body[attributeName].length === 0)
+    || utils.isEmptyObject(req.body[attributeName])) {
     result.push(options.message ? options.message : "REQUIRED");
     return true;
   }
   return false;
+}
+
+const TYPE = (req, attributeName, result, options = {}) => {
+  if (typeof req.body[attributeName] !== (options.value ? options.value : options)) {
+    result.push({
+      code: (options.message ? options.message : "TYPE"),
+      params: {
+        type: (options.value ? options.value : options),
+      }
+    });
+    return false;
+  }
+  return true;
 }
 
 const MATCH = (error, req, attributeName, result, options, callback) => {
@@ -69,9 +85,7 @@ const MATCH = (error, req, attributeName, result, options, callback) => {
     return (a && b);
   }, (options.values.exclusion ? false : true));
   if (!(options.values.exclusion ^ matchResult)) {
-    if (matchResult) {
-      result.push(options.message ? options.message : "MISMATCH");
-    }
+    result.push(options.message ? options.message : "MISMATCH");
   }
   callback();
 }
@@ -97,4 +111,4 @@ const CONTAIN = (error, req, attributeName, result, options, callback) => {
   callback();
 }
 
-module.exports = { LENGTH, DUPLICATION, REQUIRE, MATCH, CONTAIN };
+module.exports = { TYPE, LENGTH, DUPLICATION, REQUIRE, MATCH, CONTAIN };

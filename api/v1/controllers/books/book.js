@@ -1,12 +1,12 @@
 'use strict';
 
-let router = require('express').Router()
+let router = require('express').Router();
 let Book = require('../../models/book');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 
 router.route('/')
 
-  .get((req, res) => {
+  .get((req, res, next) => {
     //TODO: sanitize 
     Book.findById(req.params.book_id, (err, book) => {
       //TODO: res
@@ -18,7 +18,7 @@ router.route('/')
     });
   })
 
-  .put((req, res) => {
+  .put((req, res, next) => {
     //TODO: sanitize
     Book.findById(req.params.book_id, (err, book) => {
       if (errDB) {
@@ -43,7 +43,7 @@ router.route('/')
     });
   })
 
-  .delete((req, res) => {
+  .delete((req, res, next) => {
     //TODO: sanitize
     Book.remove({
       _id: req.params.book_id
