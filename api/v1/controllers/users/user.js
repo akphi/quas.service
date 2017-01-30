@@ -1,12 +1,12 @@
 'use strict';
 
-let router = require('express').Router()
+let router = require('express').Router();
 let config = require('../../../../setup/config');
 let User = require('../../models/user');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 
 router.route('/')
-  .get((req, res) => {
+  .get((req, res, next) => {
     //TODO: name, sanitize
     User.find({}, (errDB, users) => {
       //TODO: res

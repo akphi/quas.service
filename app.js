@@ -21,16 +21,24 @@ if (cluster.isMaster) {
   // Setup the app
   async.series([
     (callback) => {
-      let bodyParser = require('body-parser');
       let helmet = require('helmet');
       app.use(helmet());
       app.disable('x-powered-by');
       app.use(express.static('public'));
+
+      let bodyParser = require('body-parser');
       app.use(bodyParser.urlencoded({
         extended: true
       }));
       app.use(bodyParser.json());
-      app.listen(config.get('NODE_PORT'));
+      app.use(function (error, req, res, next) {
+        if (error instanceof SyntaxError) {
+          return res.status(400).json((config.get('SERVER_ENV') === 'development' ? error : {}));
+        }
+        next();
+      });
+
+      app.listen(config.get('SERVER_PORT'));
       callback();
     },
     (callback) => {
@@ -40,7 +48,7 @@ if (cluster.isMaster) {
     if (error) {
       logger.error(loggerMessage.INITIALIZATION_FAILURE, error);
       app.route('*').all((req, res) => {
-        res.status(500).json({});
+        res.status(500).json((config.get('SERVER_ENV') === 'development' ? error : {}));
       })
     } else {
       logger.info(loggerMessage.INITIALIZATION_SUCCESS);
@@ -53,8 +61,8 @@ if (cluster.isMaster) {
 }
 
 // Handle uncaught exception
-process.on('uncaughtException', (err) => {
-  logger.info(loggerMessage.UNCAUGHT_EXCEPTION, { message: err.message, stack: err.stack });
+process.on('uncaughtException', (error) => {
+  logger.info(loggerMessage.UNCAUGHT_EXCEPTION, { message: error.message, stack: error.stack });
   logger.info(loggerMessage.CLUSTER_WORKER_TERMINATE, process.pid);
   process.exit(1);
 })

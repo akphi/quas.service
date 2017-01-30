@@ -1,6 +1,6 @@
 'use strict';
 
-let router = require('express').Router()
+let router = require('express').Router();
 let config = require('../../../../setup/config');
 let User = require('../../models/user');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
@@ -9,7 +9,7 @@ let jwt = require('jsonwebtoken');
 
 router.route('/')
 
-  .post((req, res) => {
+  .post((req, res, next) => {
     //TODO: sanitize db
     User.findOne({
       name: req.body.name
@@ -32,10 +32,10 @@ router.route('/')
                   name: user.name,
                   role: user.role
                 }
-              }, config.get('NODE_JWT_SECRET'), {
-                  expiresIn: Number(config.get('NODE_JWT_EXPIRE')) // expires in 24 hours
+              }, config.get('TOKEN_JWT_SECRET'), {
+                  expiresIn: Number(config.get('TOKEN_JWT_EXPIRE')) // expires in 24 hours
                 });
-                //TODO: res
+              //TODO: res
               res.status(200).send({
                 success: true,
                 message: 'Enjoy your token!',
