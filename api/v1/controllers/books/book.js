@@ -8,7 +8,7 @@ router.route('/')
 
   .get((req, res, next) => {
     //TODO: sanitize 
-    Book.findById(req.params.book_id, (err, book) => {
+    Book.findById(req.params.book_id, (errDB, book) => {
       //TODO: res
       if (errDB) {
         res.send(errDB);
@@ -20,7 +20,7 @@ router.route('/')
 
   .put((req, res, next) => {
     //TODO: sanitize
-    Book.findById(req.params.book_id, (err, book) => {
+    Book.findById(req.params.book_id, (errDB, book) => {
       if (errDB) {
         //TODO: res
         res.send(errDB);
@@ -47,7 +47,7 @@ router.route('/')
     //TODO: sanitize
     Book.remove({
       _id: req.params.book_id
-    }, (err, book) => {
+    }, (errDB, book) => {
       //TODO: res
       if (errDB) {
         res.send(errDB);

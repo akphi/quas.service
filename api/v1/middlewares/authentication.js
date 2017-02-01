@@ -15,13 +15,13 @@ module.exports = (req, res, next) => {
           // Token has expired
           return response.error(req, res, {
             status: "401",
-            error: error.TOKEN_EXPIRED,
+            error: error.TOKEN_EXPIRED
           });
         } else {
           // Token is invalid or validation failed.
           return response.error(req, res, {
             status: "401",
-            error: error.TOKEN_INVALID,
+            error: error.TOKEN_INVALID
           });
         }
       } else {
@@ -34,7 +34,7 @@ module.exports = (req, res, next) => {
     // Token is missing.
     return response.error(req, res, {
       status: "401",
-      error: error.TOKEN_MISSING,
+      error: error.TOKEN_MISSING
     });
   }
 };

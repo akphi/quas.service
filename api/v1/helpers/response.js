@@ -10,27 +10,27 @@ let response = (req, res, defaults, options = {}) => {
     code: (options.error ? options.error : defaults.code),
     message: (options.message ? options.message : message.error(req, (defaults.code ? defaults.code : options.error))),
     field: (options.field ? message.validation(req, options.field) : undefined),
-    data: (options.data ? options.data : undefined),
+    data: (options.data ? options.data : undefined)
   });
 }
 
 let error = (req, res, options = {}) => {
   response(req, res, {
-    status: 400,
+    status: 400
   }, options)
 };
 
 let success = (req, res, options = {}) => {
   response(req, res, {
     status: 200,
-    code: errorCode.SUCCESS,
+    code: errorCode.SUCCESS
   }, options)
 };
 
 let errorValidation = (req, res, options = {}) => {
   response(req, res, {
     status: 400,
-    code: errorCode.VALIDATION,
+    code: errorCode.VALIDATION
   }, options)
 };
 

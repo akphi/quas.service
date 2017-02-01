@@ -15,7 +15,7 @@ let params = {
   // to hash the password. tune so that hashing the password takes about a
   // second
   iterations: Number(config.get('PASSWORDHASHER_ITERATIONS')),
-  algorithm: config.get('PASSWORDHASHER_ALGORITHM'),
+  algorithm: config.get('PASSWORDHASHER_ALGORITHM')
 };
 
 /**

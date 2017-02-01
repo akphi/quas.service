@@ -9,7 +9,7 @@ const USER_PASSWORD = {
   validator: [{
     function: "LENGTH",
     values: {
-      min: constants.PASSWORD_MIN_LENGTH,
+      min: constants.PASSWORD_MIN_LENGTH
     }
   }]
 }
@@ -22,7 +22,7 @@ const USER_USERNAME = {
     function: "LENGTH",
     values: {
       min: constants.USERNAME_MIN_LENGTH,
-      max: constants.USERNAME_MAX_LENGTH,
+      max: constants.USERNAME_MAX_LENGTH
     }
   },
   {

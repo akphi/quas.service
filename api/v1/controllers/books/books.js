@@ -32,7 +32,7 @@ router.route('/')
       edition: req.body.edition,
       author: req.body.author,
       publisher: req.body.publisher,
-      isbn: req.body.isbn,
+      isbn: req.body.isbn
     });
     book.save((errDB) => {
       //TODO: res

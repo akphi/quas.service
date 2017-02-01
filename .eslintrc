@@ -7,13 +7,25 @@
     "plugin:node/recommended"
   ],
   "rules": {
+    "node/no-unpublished-require": [
+      "error",
+      {
+        "allowModules": [
+          "gulpfile"
+        ]
+      }
+    ],
+    "comma-dangle": [
+      1,
+      "never"
+    ],
     "no-process-exit": 0,
     "node/exports-style": [
       "error",
       "module.exports"
     ],
     "no-unused-vars": [
-      2,
+      1,
       {
         "argsIgnorePattern": "^next$"
       }

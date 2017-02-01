@@ -12,7 +12,7 @@ let directories = {
   server: './log/server/',
   api: './log/api/',
   traffic: './log/traffic/',
-  exception: './log/exception/',
+  exception: './log/exception/'
 }
 let fileTransport = (name, level, label, dirname, filename, dailyRotateOptions, maxsize = config.get('LOGGER_MAX_SIZE'), maxFiles = config.get('LOGGER_MAX_FILES')) => {
   return new winston.transports.DailyRotateFile({
@@ -29,7 +29,7 @@ let fileTransport = (name, level, label, dirname, filename, dailyRotateOptions, 
     handleExceptions: false,
     colorize: true,
     prettyPrint: true,
-    timestamp: true,
+    timestamp: true
   })
 };
 
@@ -60,7 +60,7 @@ let serverLogger = (label) => {
         prepend: true
       }),
       consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label)
-    ],
+    ]
   });
   return winston.loggers.get(label);
 };
@@ -78,7 +78,7 @@ let apiLogger = (label, version = "undefined") => {
         prepend: true
       }),
       consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label)
-    ],
+    ]
   });
   return winston.loggers.get(label);
 };
@@ -91,7 +91,7 @@ let trafficTracker = new winston.Logger({
     }),
     consoleTransport('traffic-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), 'TRAFFIC', undefined)
     // Formatting will be taken care by morgan
-  ],
+  ]
 });
 
 winston.handleExceptions([
@@ -102,7 +102,7 @@ winston.handleExceptions([
   new winston.transports.Console({
     humanReadableUnhandledException: true,
     colorize: true,
-    prettyPrint: true,
+    prettyPrint: true
   })
 ]);
 

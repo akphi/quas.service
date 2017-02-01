@@ -13,5 +13,5 @@ module.exports = {
 
   US001: "This username is already taken",
 
-  VA001: "Validation failed",
+  VA001: "Validation failed"
 }

@@ -32,7 +32,7 @@ router.route('/')
         let user = new User({
           username: req.body.username,
           password: result.toString('base64'),
-          role: constants.USER_ROLE,
+          role: constants.USER_ROLE
         });
         user.save((errDB) => {
           if (errDB) {

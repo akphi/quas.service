@@ -7,5 +7,5 @@ module.exports = {
 
   TOKEN_INVALID: "TK001",
   TOKEN_MISSING: "TK002",
-  TOKEN_EXPIRED: "TK003",
+  TOKEN_EXPIRED: "TK003"
 };

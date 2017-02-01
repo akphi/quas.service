@@ -14,7 +14,7 @@ let settings = {
   //React frontend only allow lowercase custom headers
   //NodeJS also use lowercase: http://stackoverflow.com/questions/40700283/how-to-get-response-header-in-node-js
   CORS_HEADERS: ['authorization', 'content-type', 'x-language'],
-  CORS_END_PREFLIGHT: true,
+  CORS_END_PREFLIGHT: true
 };
 
 config.use('memory')
