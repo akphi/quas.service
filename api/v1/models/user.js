@@ -2,9 +2,15 @@
 
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
+let database = require('../../../setup/database');
+let bean = require('./beans/user');
 
-module.exports = mongoose.model('User', new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    role: { type: Number, required: true }
-}));
+let modelCreator = (connection) => {
+    let userSchema = new Schema(bean)
+    return connection.model('User', userSchema);
+}
+
+module.exports = {
+    user: modelCreator(database.mongodb.user.connection),
+    public: modelCreator(database.mongodb.public.connection)
+}

@@ -1,9 +1,8 @@
 'usestrict';
 
 let config = require('../../../setup/config');
-let logger = require('../../../setup/logger').api('MIDDLEWARE', 'v1');
 let error = require('../constants/error');
-let jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+let jwt = require('jsonwebtoken');
 let response = require('../helpers/response');
 
 module.exports = (req, res, next) => {

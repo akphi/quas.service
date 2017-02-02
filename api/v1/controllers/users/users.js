@@ -2,13 +2,14 @@
 
 let router = require('express').Router();
 
-let User = require('../../models/user');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 let loggerMessage = require('../../constants/logger');
 let password = require('../../helpers/password');
 let response = require('../../helpers/response');
 let validator = require('../../validators/models/user');
 let constants = require('../../constants/user');
+
+let User = require('../../models/user').user;
 
 router.route('/')
 

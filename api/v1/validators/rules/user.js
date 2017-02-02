@@ -29,7 +29,7 @@ const USER_USERNAME = {
     function: "DUPLICATION",
     message: "USER_USERNAME_DUPLICATED",
     values: {
-      schema: require('../../models/user')
+      schema: require('../../models/user').user
     }
   },
   {

@@ -42,7 +42,7 @@ const DUPLICATION = (error, req, attributeName, result, options, callback) => {
   query[attributeName] = dbSanitizer(req.body[attributeName]);
   options.values.schema.findOne(query, (errDB, user) => {
     if (errDB) {
-      error.push(new Error(errDB));
+      error.push(errDB);
     } else {
       if (user) {
         result.push(options.message);

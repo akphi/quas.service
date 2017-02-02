@@ -14,6 +14,7 @@ let directories = {
   traffic: './log/traffic/',
   exception: './log/exception/'
 }
+
 let fileTransport = (name, level, label, dirname, filename, dailyRotateOptions, maxsize = config.get('LOGGER_MAX_SIZE'), maxFiles = config.get('LOGGER_MAX_FILES')) => {
   return new winston.transports.DailyRotateFile({
     name: name,

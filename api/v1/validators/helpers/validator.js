@@ -15,7 +15,7 @@ let appendResult = (results, attributeName, result) => {
 }
 
 const validateObject = (req, res, next, callbackMain, option) => {
-  let error = {};
+  let error = [];
   let resultValidation = {};
   async.parallel(option.field.map((attribute) => {
     return (callback) => { validateAttribute(req, resultValidation, error, rule[attribute], callback); }
@@ -23,7 +23,7 @@ const validateObject = (req, res, next, callbackMain, option) => {
     if (errorAsync) {
       error.push(new Error(errorAsync));
     }
-    if (!utils.isEmptyObject(error)) {
+    if (error.length !== 0) {
       return next({ logger: logger, message: loggerMessage.VALIDATION_ENGINE_FAILURE, data: error });
     } else {
       if (!utils.isEmptyObject(resultValidation)) {

@@ -1,39 +1,47 @@
+'usestrict';
+
 let gulp = require('gulp');
+let util = require('gulp-util');
 let nodemon = require('gulp-nodemon');
 let eslint = require('gulp-eslint');
 let runSequence = require('run-sequence');
 
-gulp.task('lint', () => {
-  return gulp.src(['./**/*.js', '!node_modules/**'])
-    .pipe(eslint()).pipe(eslint.format());
-})
+gulp.task('eslint', () => {
+  return gulp.src(['./**/*.js', '!node_modules/**', '!deployment/**'])
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
 
-gulp.task('watch', () => {
+gulp.task('develop.start', () => {
   nodemon({
-    script: 'app.js',
+    quiet: true,
     "restartable": "rs",
     "ignore": [
       ".git",
       "node_modules/**/node_modules",
+      "./deployment",
       "*.log*",
       "**/*.log*",
       "*.rdb"
     ],
-    "verbose": false,
     "execMap": {},
     "events": {},
     "watch": [
       ".",
       ".env"
     ],
-    "env": {
-      "DEBUGER": "worker"
+    env: {
+      'DEBUGER': 'worker'
     },
-    "ext": "js json"
+    tasks: (changedFiles) => {
+      changedFiles.forEach(function (file) {
+        util.log('File changed', util.colors.magenta(file));
+      });
+      return ['eslint'];
+    }
   })
-    .on('restart', ['lint']);
 });
 
 gulp.task('develop', (done) => {
-  runSequence(['lint', 'watch'], done);
+  runSequence('eslint', 'develop.start', done);
 });

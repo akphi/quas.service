@@ -18,8 +18,9 @@ if (cluster.isMaster) {
     logger.info(loggerMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
   });
 } else {
-  // Setup the app
+
   async.series([
+    //Setup the app
     (callback) => {
       let helmet = require('helmet');
       app.use(helmet());
@@ -37,27 +38,36 @@ if (cluster.isMaster) {
         }
         next();
       });
-
       app.listen(config.get('SERVER_PORT'));
       callback();
-    },
-    (callback) => {
-      require('./setup/database')(callback);
-    },
-  ], (error) => {
-    if (error) {
-      logger.error(loggerMessage.INITIALIZATION_FAILURE, error);
-      app.route('*').all((req, res) => {
-        res.status(500).json((config.get('SERVER_ENV') === 'development' ? error : {}));
-      })
-    } else {
-      logger.info(loggerMessage.INITIALIZATION_SUCCESS);
-      app.use('/api', router);
-      app.use('*', (req, res) => {
-        res.status(404).json({});
-      });
     }
-  });
+  ].concat(
+    // Setup the database
+    Object.keys(require('./setup/database')).map((database) => {
+      return Object.keys(require('./setup/database')[database]).map((scope) => {
+        return (callback) => {
+          require('./setup/database')[database][scope].checkConnection(callback);
+        }
+      })
+    }).reduce((a, b) => {
+      return a.concat(b);
+    }, [])),
+
+    // Error Handler
+    (error) => {
+      if (error) {
+        logger.error(loggerMessage.INITIALIZATION_FAILURE, error);
+        app.route('*').all((req, res) => {
+          res.status(500).json((config.get('SERVER_ENV') === 'development' ? error : {}));
+        })
+      } else {
+        logger.info(loggerMessage.INITIALIZATION_SUCCESS);
+        app.use('/api', router);
+        app.use('*', (req, res) => {
+          res.status(404).json({});
+        });
+      }
+    });
 }
 
 // Handle uncaught exception
