@@ -24,7 +24,7 @@ db.createRole({
   role: "restrictedReadWrite",
   roles: [],
   privileges: [
-    { resource: { db: "quas_mongodb_db", collection: "users" }, actions: ["find", "insert", "remove", "update"] }
+    { resource: { db: "quas_mongodb_db", collection: "user" }, actions: ["find", "insert", "remove", "update"] }
   ]
 });
 
@@ -32,7 +32,7 @@ db.createRole({
   role: "restrictedRead",
   roles: [],
   privileges: [
-    { resource: { db: "quas_mongodb_db", collection: "users" }, actions: ["find"] }
+    { resource: { db: "quas_mongodb_db", collection: "user" }, actions: ["find"] }
   ]
 });
 

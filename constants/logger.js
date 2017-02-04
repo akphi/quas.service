@@ -2,6 +2,7 @@
 
 module.exports = {
   CLUSTER_WORKER_INIT: "Cluster started worker",
+  CLUSTER_MASTER_INIT: "Cluster started master",
   CLUSTER_WORKER_TERMINATE: "Cluster terminated worker",
 
   INITIALIZATION_SUCCESS: "Initialization completed",

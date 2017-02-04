@@ -3,7 +3,7 @@
 let router = require('express').Router();
 let dbSanitizer = require('mongo-sanitize');
 
-let Book = require('../../models/book');
+let Book = require('../../../../database/models/book');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 let loggerMessage = require('../../constants/logger');
 let validator = require('../../validators/models/book');

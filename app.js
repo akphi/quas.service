@@ -10,6 +10,7 @@ let loggerMessage = require('./constants/logger');
 let config = require('./setup/config');
 
 if (cluster.isMaster) {
+  logger.info(loggerMessage.CLUSTER_MASTER_INIT, process.pid);
   let workersNumber = config.get('NODE_CORE_WORKERS_SIZE') || require('os').cpus().length;
   for (let i = 0; i < workersNumber; ++i) {
     logger.info(loggerMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
@@ -43,10 +44,10 @@ if (cluster.isMaster) {
     }
   ].concat(
     // Setup the database
-    Object.keys(require('./setup/database')).map((database) => {
-      return Object.keys(require('./setup/database')[database]).map((scope) => {
+    Object.keys(require('./database/engine')).map((database) => {
+      return Object.keys(require('./database/engine')[database]).map((scope) => {
         return (callback) => {
-          require('./setup/database')[database][scope].checkConnection(callback);
+          require('./database/engine')[database][scope].checkConnection(callback);
         }
       })
     }).reduce((a, b) => {

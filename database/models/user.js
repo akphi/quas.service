@@ -2,12 +2,12 @@
 
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
-let database = require('../../../setup/database');
+let database = require('../engine');
 let bean = require('./beans/user');
 
 let modelCreator = (connection) => {
-    let userSchema = new Schema(bean)
-    return connection.model('User', userSchema);
+    let userSchema = new Schema(bean, { collection: 'user' })
+    return connection.model('user', userSchema);
 }
 
 module.exports = {

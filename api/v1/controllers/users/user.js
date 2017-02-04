@@ -2,7 +2,7 @@
 
 let router = require('express').Router();
 let config = require('../../../../setup/config');
-let User = require('../../models/user');
+let User = require('../../../../database/models/user');
 let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
 
 router.route('/')

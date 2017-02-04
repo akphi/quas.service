@@ -1,8 +1,8 @@
 'use strict';
 
-let config = require('../../config');
+let config = require('../../../setup/config');
 let mongoose = require('mongoose');
-let logger = require('../../logger').server('DATABASE');
+let logger = require('../../../setup/logger').server('DATABASE');
 let loggerMessage = require('../../../constants/logger');
 
 mongoose.Promise = global.Promise;

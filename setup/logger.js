@@ -60,7 +60,10 @@ let serverLogger = (label) => {
         datePattern: 'yyyy-MM-dd',
         prepend: true
       }),
-      consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label)
+      consoleTransport('server-console-log', (process.env.SERVER_ENV === 'development' ? 'debug' : 'info'), label, (options) => {
+        return options.timestamp() + ' ' + winston.config.colorize(options.level, options.level.toUpperCase()) + ' [' + label.toUpperCase() + '] ' + process.pid + ': ' + (undefined !== options.message ? options.message : '') +
+          (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
+      })
     ]
   });
   return winston.loggers.get(label);

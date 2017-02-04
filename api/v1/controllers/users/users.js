@@ -9,7 +9,7 @@ let response = require('../../helpers/response');
 let validator = require('../../validators/models/user');
 let constants = require('../../constants/user');
 
-let User = require('../../models/user').user;
+let User = require('../../../../database/models/user').user;
 
 router.route('/')
 
