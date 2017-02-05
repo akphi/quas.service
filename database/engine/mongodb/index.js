@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  user: require('./user'),
-  public: require('./public')
+  user: require('./connections/user'),
+  public: require('./connections/public')
 };

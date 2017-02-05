@@ -5,6 +5,7 @@ let app = express();
 let cluster = require('cluster');
 let async = require('async');
 let router = require('./api');
+let database = require('./database/engine');
 let logger = require('./setup/logger').server('APP');
 let loggerMessage = require('./constants/logger');
 let config = require('./setup/config');
@@ -44,10 +45,10 @@ if (cluster.isMaster) {
     }
   ].concat(
     // Setup the database
-    Object.keys(require('./database/engine')).map((database) => {
-      return Object.keys(require('./database/engine')[database]).map((scope) => {
+    Object.keys(database).map((engine) => {
+      return Object.keys(database[engine]).map((privilege) => {
         return (callback) => {
-          require('./database/engine')[database][scope].checkConnection(callback);
+          database[engine][privilege].checkConnection(callback);
         }
       })
     }).reduce((a, b) => {

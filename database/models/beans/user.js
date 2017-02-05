@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    username: String,
-    password: String,
-    role: Number
+    username: { type: String },
+    password: { type: String },
+    role: { type: Number }
 }

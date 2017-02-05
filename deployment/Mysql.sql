@@ -1,3 +1,5 @@
+CREATE DATABASE quas_mysql_db;
+
 CREATE USER 'quas_admin'@'localhost' IDENTIFIED BY 'quas_password';
 GRANT ALL ON quas_mysql_db.* TO 'quas_admin'@'localhost';
 

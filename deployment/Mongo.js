@@ -11,7 +11,7 @@ db.createUser({
 // sudo mongod -dbpath ../db/quas_mongodb_db/ --auth
 // mongo -u quas_root -p quas_password --authenticationDatabase admin
 use quas_mongodb_db;
-db.createCollections("users");
+db.createCollection("user");
 db.createUser({
   user: "quas_admin",
   pwd: "quas_password",

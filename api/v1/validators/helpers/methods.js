@@ -38,18 +38,18 @@ const LENGTH = (error, req, attributeName, result, options, callback) => {
 }
 
 const DUPLICATION = (error, req, attributeName, result, options, callback) => {
-  let query = new Object();
-  query[attributeName] = dbSanitizer(req.body[attributeName]);
-  options.values.schema.findOne(query, (errDB, user) => {
-    if (errDB) {
-      error.push(errDB);
-    } else {
-      if (user) {
-        result.push(options.message);
-      }
-    }
-    callback();
-  });
+  // let query = new Object();
+  // query[attributeName] = dbSanitizer(req.body[attributeName]);
+  // options.values.schema.findOne(query, (errDB, user) => {
+  //   if (errDB) {
+  //     error.push(errDB);
+  //   } else {
+  //     if (user) {
+  //       result.push(options.message);
+  //     }
+  //   }
+  //   callback();
+  // });
 }
 
 const REQUIRE = (req, attributeName, result, options = {}) => {

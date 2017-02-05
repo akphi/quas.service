@@ -9,7 +9,11 @@ let response = require('../../helpers/response');
 let validator = require('../../validators/models/user');
 let constants = require('../../constants/user');
 
-let User = require('../../../../database/models/user').user;
+let User = require('../../../../database/models').get("user", "user");
+let User_mysql = require('../../../../database/models').get("user_mysql", "user");
+
+let databaseConnection = require('../../../../database/engine/mysql').user;
+let database = require('../../../../database/engine/mysql/helpers');
 
 router.route('/')
 
@@ -25,6 +29,9 @@ router.route('/')
   })
 
   .post((req, res, next) => {
+    User_mysql.find((errDB, result) => {
+      if (errDB) return next({ logger: logger, message: loggerMessage.DATABASE_USER_PERSISTENCE_FAILURE, data: errDB });
+    });
     validator.registration(req, res, next, () => {
       password.hashPassword(req.body.password, (errHashPassword, result) => {
         if (errHashPassword) {

@@ -1,9 +1,9 @@
 'use strict';
 
-let config = require('../../../setup/config');
+let config = require('../../../../setup/config');
 let mysql2 = require('mysql2');
-let logger = require('../../../setup/logger').server('DATABASE');
-let loggerMessage = require('../../../constants/logger');
+let logger = require('../../../../setup/logger').server('DATABASE');
+let loggerMessage = require('../../../../constants/logger');
 
 let pool = mysql2.createPool({
   host: config.get('DB_MYSQL_HOST'),

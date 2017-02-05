@@ -1,17 +1,17 @@
 'use strict';
 
-let config = require('../../../setup/config');
+let config = require('../../../../setup/config');
 let mongoose = require('mongoose');
-let logger = require('../../../setup/logger').server('DATABASE');
-let loggerMessage = require('../../../constants/logger');
+let logger = require('../../../../setup/logger').server('DATABASE');
+let loggerMessage = require('../../../../constants/logger');
 
 mongoose.Promise = global.Promise;
 let connection = mongoose.createConnection("mongodb://" + config.get('DB_MONGO_HOST') + ":" + config.get('DB_MONGO_PORT') + "/" + config.get('DB_MONGO_DBNAME'), {
   auth: {
     authdb: config.get('DB_MONGO_DBAUTHENTICATION')
   },
-  user: config.get('DB_MONGO_USER_USERNAME'),
-  pass: config.get('DB_MONGO_USER_PASSWORD'),
+  user: config.get('DB_MONGO_PUBLIC_USERNAME'),
+  pass: config.get('DB_MONGO_PUBLIC_PASSWORD'),
   reconnectTries: Number.MAX_VALUE, // Unlimited amount of time within connection time-out
   reconnectInterval: Number(config.get('DB_MONGO_RECONNECT_INTERVAL')),
   server: {
@@ -31,6 +31,9 @@ let connection = mongoose.createConnection("mongodb://" + config.get('DB_MONGO_H
     }
   }
 });
+
+// connection.on('disconnected', () => {}); // Should we handle this?
+// Should we generally detach the database from the server startup?
 
 let checkConnection = (callback) => {
   connection

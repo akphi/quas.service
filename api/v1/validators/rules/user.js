@@ -25,13 +25,13 @@ const USER_USERNAME = {
       max: constants.USERNAME_MAX_LENGTH
     }
   },
-  {
-    function: "DUPLICATION",
-    message: "USER_USERNAME_DUPLICATED",
-    values: {
-      schema: require('../../../../database/models/user').user
-    }
-  },
+  // {
+  //   function: "DUPLICATION",
+  //   message: "USER_USERNAME_DUPLICATED",
+  //   values: {
+  //     schema: require('../../../../database/models').get("user", "user")
+  //   }
+  // },
   {
     function: "MATCH",
     message: "USER_USERNAME_RULE_1",
