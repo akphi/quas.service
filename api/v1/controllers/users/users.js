@@ -13,13 +13,17 @@ let User = require('../../../../database/models').get("user", "user");
 let User_mysql = require('../../../../database/models').get("user_mysql", "user");
 
 let databaseConnection = require('../../../../database/engine/mysql').user;
+
+let mongoDB = require('../../../../database/engine/mongodb').public;
 let database = require('../../../../database/engine/mysql/helpers');
 
 router.route('/')
 
   //TODO: fix this method
   .get((req, res, next) => {
-    User.find({}, (errDB, users) => {
+    // mongoDB.connection().authenticate();
+    mongoDB.connection().collection("user").save({username: "an"}, (errDB, users) => {
+      // mongoDB.connection().collection("userds");
       if (errDB) {
         res.send(errDB);
       } else {
