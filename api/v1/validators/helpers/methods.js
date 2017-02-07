@@ -77,15 +77,14 @@ const TYPE = (req, attributeName, result, options = {}) => {
     }
     return true;
   }
+  let tempResult = false;
   switch ((options.value ? options.value : options)) {
     case 'string':
       typeCheckResult = generateResult((typeof req.body[attributeName] === type), result, options);
       break;
     case 'number':
-      if (typeof req.body[attributeName] === 'string' && !Number.isNaN(Number(req.body[attributeName]))) {
-        req.body[attributeName] = Number(req.body[attributeName]);
-      }
-      typeCheckResult = generateResult((typeof req.body[attributeName] === type), result, options);
+      tempResult = ((typeof req.body[attributeName] === type) || (typeof req.body[attributeName] === 'string' && !Number.isNaN(Number(req.body[attributeName]))));
+      typeCheckResult = generateResult(tempResult, result, options);
       break;
     case 'boolean':
       typeCheckResult = generateResult((typeof req.body[attributeName] === type), result, options);

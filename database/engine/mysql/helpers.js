@@ -1,5 +1,15 @@
 'use strict';
 
+let moment = require("moment");
+
+let stringToDate = (input) => {
+  return moment(input).format("YYYY-MM-DD HH:MM:SS");
+}
+
+let parseDbObject = (input, callback) => {
+  callback();
+}
+
 let execute = (query, params, pool, callback) => {
   pool.getConnection((errorConnection, connection) => {
     if (errorConnection) {
@@ -26,4 +36,4 @@ Schema.prototype.find = function (callback) {
   return execute("SELECT * FROM " + this.name, [], this.pool, callback)
 };
 
-module.exports = { execute, Schema };
+module.exports = { execute, Schema, stringToDate, parseDbObject };
