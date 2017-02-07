@@ -4,7 +4,7 @@ let async = require('async');
 let rule = require('../rules');
 let methods = require('./methods');
 
-let logger = require('../../').server.logger.api('VALIDATOR', 'v1');
+let logger = require('../../server').logger.api('VALIDATOR', 'v1');
 let apiLoggerMessage = require('../../constants/api.logger');
 let response = require('../../helpers/response');
 let utils = require('../../helpers/utils');

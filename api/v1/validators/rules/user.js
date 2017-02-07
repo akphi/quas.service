@@ -1,6 +1,6 @@
 'use strict';
 
-let constants = require('../../constants/user');
+let constants = require('../../constants/validation/user');
 
 const USER_PASSWORD = {
   name: "password",

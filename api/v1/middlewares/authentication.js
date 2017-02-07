@@ -1,6 +1,6 @@
 'usestrict';
 
-let config = require('../../../setup/config');
+let config = require('../server').config;
 let error = require('../constants/error');
 let jwt = require('jsonwebtoken');
 let response = require('../helpers/response');

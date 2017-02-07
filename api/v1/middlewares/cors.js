@@ -1,7 +1,7 @@
 'use strict';
 
-let config = require('../../../setup/config');
 let corser = require('corser');
+let config = require('../server').config;
 
 module.exports = corser.create({
   origins: config.get('CORS_DOMAINS'),

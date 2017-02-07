@@ -1,8 +1,8 @@
 'use strict';
 
-let config = require('../../../setup/config');
 let RateLimit = require('express-rate-limit');
 let RedisStore = require('rate-limit-redis');
+let config = require('../server').config;
 
 // app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS if you use an ELB, custom Nginx setup, etc) 
 

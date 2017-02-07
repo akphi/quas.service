@@ -1,9 +1,9 @@
 'use strict';
 
 let router = require('express').Router();
-let config = require('../../../../setup/config');
-let User = require('../../../../database/models/').get("user","user");
-let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
+let config = require('../../server').config;
+// let User = require('../../../../database/models/').get("user","user");
+let logger = require('../../server').logger.api('CONTROLLER', 'v1');
 
 router.route('/')
   // .get((req, res, next) => {

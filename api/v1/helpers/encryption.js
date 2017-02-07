@@ -1,21 +1,21 @@
 'use strict';
 
 let crypto = require('crypto');
-let config = require('../../../setup/config');
+let config = require('../server').config;
 
 // larger numbers mean better security, less
 let params = {
   // size of the generated hash
-  hashBytes: Number(config.get('PASSWORDHASHER_HASHBYTES')),
+  hashBytes: Number(config.get('ENCRYPTION_HASHSALT_HASHBYTES')),
   // larger salt means hashed passwords are more resistant to rainbow table, but
   // you get diminishing returns pretty fast
-  saltBytes: Number(config.get('PASSWORDHASHER_SALTBYTES')),
+  saltBytes: Number(config.get('ENCRYPTION_HASHSALT_SALTBYTES')),
   // more iterations means an attacker has to take longer to brute force an
   // individual password, so larger is better. however, larger also means longer
   // to hash the password. tune so that hashing the password takes about a
   // second
-  iterations: Number(config.get('PASSWORDHASHER_ITERATIONS')),
-  algorithm: config.get('PASSWORDHASHER_ALGORITHM')
+  iterations: Number(config.get('ENCRYPTION_HASHSALT_ITERATIONS')),
+  algorithm: config.get('ENCRYPTION_HASHSALT_ALGORITHM')
 };
 
 /**
@@ -27,7 +27,7 @@ let params = {
  * @param {!String} password
  * @param {!function(?Error, ?Buffer=)} callback
  */
-let hashPassword = (password, callback) => {
+let applyHashSalt = (password, callback) => {
   crypto.randomBytes(params.saltBytes, (errHashPassword, salt) => {
     if (errHashPassword) {
       return callback(errHashPassword);
@@ -49,7 +49,7 @@ let hashPassword = (password, callback) => {
 
         salt.copy(combined, 8);
         hash.copy(combined, salt.length + 8);
-        callback(null, combined);
+        callback(null, combined.toString('base64'));
       });
   });
 }
@@ -65,7 +65,7 @@ let hashPassword = (password, callback) => {
  *   hashPassword.
  * @param {!function(?Error, !boolean)}
  */
-let verifyPassword = (password, combined, callback) => {
+let verifyHashSalt = (password, combined, callback) => {
   // extract the salt and hash from the combined buffer
   let saltBytes = combined.readUInt32BE(0);
   let hashBytes = combined.length - saltBytes - 8;
@@ -83,4 +83,4 @@ let verifyPassword = (password, combined, callback) => {
   });
 }
 
-module.exports = { hashPassword, verifyPassword };
+module.exports = { applyHashSalt, verifyHashSalt };

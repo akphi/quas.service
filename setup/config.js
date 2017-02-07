@@ -1,6 +1,8 @@
 'use strict';
 
 let config = require('nconf');
+let moment = require('moment');
+
 require('dotenv').load();
 
 let settings = {
@@ -14,7 +16,10 @@ let settings = {
   //React frontend only allow lowercase custom headers
   //NodeJS also use lowercase: http://stackoverflow.com/questions/40700283/how-to-get-response-header-in-node-js
   CORS_HEADERS: ['authorization', 'content-type', 'x-language'],
-  CORS_END_PREFLIGHT: true
+  CORS_END_PREFLIGHT: true,
+
+  DATE_FORMAT_STANDARD: moment.ISO_8601,
+  DATE_FORMAT_DATABASE: "YYYY-MM-DD HH:MM:SS"
 };
 
 config.use('memory')

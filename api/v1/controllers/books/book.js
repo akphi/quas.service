@@ -1,8 +1,7 @@
 'use strict';
 
 let router = require('express').Router();
-let Book = require('../../../../database/models/book');
-let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
+let logger = require('../../server').logger.api('CONTROLLER', 'v1');
 
 router.route('/')
 

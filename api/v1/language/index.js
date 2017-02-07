@@ -1,7 +1,7 @@
 'use strict';
 
-let config = require('../../../setup/config');
 let mustache = require('mustache');
+let config = require('../server').config;
 
 let error = (req, message) => {
   if (message.params) {

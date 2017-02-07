@@ -1,6 +1,7 @@
 'use strict';
 
-let config = require('../../../setup/config');
+let config = require('../server').config;
+let serverLoggerMessage = require('../server').loggerMessage;
 let errorCode = require('../constants/error');
 let message = require('../language');
 
@@ -35,16 +36,23 @@ let errorValidation = (req, res, options = {}) => {
 };
 
 let errorSystem = (err, req, res, next) => {
-  if (err.logger) {
-    (err.logger).error(err.message, err.data);
+  if (err.error) {
+    err.error['message'] = err.error.message ? err.error.message : serverLoggerMessage.UNCAUGHT_EXCEPTION;
+    err.error['data'] = err.error.data ? err.error.data : err.error;
+    if (err.logger) {
+      (err.logger).error(err.error.message, err.error.data);
+    } else {
+      require('../../../setup/logger').api('UNIDENTIFIED', 'v1').error(err.error.message, err.error.data);
+    }
+    res.status(err.status || 500)
+      .json(config.get('SERVER_ENV') === 'development' ? {
+        mode: "DEBUG",
+        message: err.error.message,
+        data: err.error.data
+      } : {});
   } else {
-    require('../../../setup/logger').api('UNIDENTIFIED', 'v1').error(err.message, err.data);
+    require('../../../setup/logger').api('UNIDENTIFIED', 'v1').error(serverLoggerMessage.UNCAUGHT_EXCEPTION, err);
   }
-  res.status(err.status || 500)
-    .json(config.get('SERVER_ENV') === 'development' ? {
-      message: err.message,
-      data: err.data
-    } : {});
 }
 
 module.exports = { error, success, errorValidation, errorSystem };

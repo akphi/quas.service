@@ -11,4 +11,4 @@ router.use('/', require('./middlewares/ratelimiter'));
 router.use('/', require('./controllers'));
 router.use(response.errorSystem);
 
-module.exports = router;
+module.exports = { router };

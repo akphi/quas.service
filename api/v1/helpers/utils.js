@@ -1,7 +1,7 @@
 'use strict';
 
 let moment = require("moment");
-let config = require('../').server.config;
+let config = require('../server').config;
 let type = require("../constants/models").type;
 
 let isEmptyObject = (object) => {

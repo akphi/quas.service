@@ -2,8 +2,8 @@
 
 let router = require('express').Router();
 
-let logger = require('../../').server.logger.api('CONTROLLER', 'v1');
-let loggerMessage = require('../../').server.loggerMessage;
+let logger = require('../../server').logger.api('CONTROLLER', 'v1');
+let loggerMessage = require('../../server').loggerMessage;
 let response = require('../../helpers/response');
 let validator = require('../../validators/models/user');
 let models = require('../../models');
@@ -12,8 +12,7 @@ let models = require('../../models');
 // let User_mysql = require('../../../../database/models').get("user_mysql", "user");
 
 // let databaseConnection = require('../../../../database/engine/mysql').user;
-
-let mongoDB = require('../../').server.databaseEngine.mongoDB.public;
+let mongoDB = require('../../server').databaseEngine.mongodb.public;
 
 // let database = require('../../../../database/engine/mysql/helpers');
 
