@@ -7,17 +7,17 @@ let async = require('async');
 let router = require('./api');
 let database = require('./database/engine');
 let logger = require('./setup/logger').server('APP');
-let serverLoggerMessage = require('./constants/server.logger');
+let serverMessage = require('./constants/server.logger');
 let config = require('./setup/config');
 
 if (cluster.isMaster) {
-  logger.info(serverLoggerMessage.CLUSTER_MASTER_INIT, process.pid);
+  logger.info(serverMessage.CLUSTER_MASTER_INIT, process.pid);
   let workersNumber = config.get('NODE_CORE_WORKERS_SIZE') || require('os').cpus().length;
   for (let i = 0; i < workersNumber; ++i) {
-    logger.info(serverLoggerMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
+    logger.info(serverMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
   }
   cluster.on('exit', () => {
-    logger.info(serverLoggerMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
+    logger.info(serverMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
   });
 } else {
 
@@ -48,7 +48,11 @@ if (cluster.isMaster) {
     Object.keys(database).map((engine) => {
       return Object.keys(database[engine]).map((privilege) => {
         return (callback) => {
-          database[engine][privilege].checkConnection(callback);
+          if (privilege !== "tool") {
+            database[engine][privilege].checkConnection(callback);
+          } else {
+            callback();
+          }
         }
       })
     }).reduce((a, b) => {
@@ -58,12 +62,12 @@ if (cluster.isMaster) {
     // Error Handler
     (error) => {
       if (error) {
-        logger.error(serverLoggerMessage.INITIALIZATION_FAILURE, error);
+        logger.error(serverMessage.INITIALIZATION_FAILURE, error);
         app.route('*').all((req, res) => {
           res.status(500).json((config.get('SERVER_ENV') === 'development' ? error : {}));
         })
       } else {
-        logger.info(serverLoggerMessage.INITIALIZATION_SUCCESS);
+        logger.info(serverMessage.INITIALIZATION_SUCCESS);
         app.use('/api', router);
         app.use('*', (req, res) => {
           res.status(404).json({});
@@ -74,8 +78,8 @@ if (cluster.isMaster) {
 
 // Handle uncaught exception
 process.on('uncaughtException', (error) => {
-  logger.info(serverLoggerMessage.UNCAUGHT_EXCEPTION, { message: error.message, stack: error.stack });
-  logger.info(serverLoggerMessage.CLUSTER_WORKER_TERMINATE, process.pid);
+  logger.info(serverMessage.UNCAUGHT_EXCEPTION, { message: error.message, stack: error.stack });
+  logger.info(serverMessage.CLUSTER_WORKER_TERMINATE, process.pid);
   process.exit(1);
 })
 

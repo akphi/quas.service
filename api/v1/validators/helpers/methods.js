@@ -1,8 +1,10 @@
 'use strict';
 
 let dbSanitizer = require('mongo-sanitize');
+let databaseEngine = require('../../server').databaseEngine;
 let validator = require('validator');
 let utils = require('../../helpers/utils');
+let apiMessage = require('../../constants/api.logger');
 
 const LENGTH = (error, req, attributeName, result, options, callback) => {
   if (options.values.min && options.values.max) {
@@ -38,18 +40,38 @@ const LENGTH = (error, req, attributeName, result, options, callback) => {
 }
 
 const DUPLICATION = (error, req, attributeName, result, options, callback) => {
-  // let query = new Object();
-  // query[attributeName] = dbSanitizer(req.body[attributeName]);
-  // options.values.schema.findOne(query, (errDB, user) => {
-  //   if (errDB) {
-  //     error.push(errDB);
-  //   } else {
-  //     if (user) {
-  //       result.push(options.message);
-  //     }
-  //   }
-  //   callback();
-  // });
+  let query = {};
+  query[attributeName] = req.body[attributeName];
+  switch (options.values.engine) {
+    case "mysql":
+      return databaseEngine.mysql.tool.findOne([attributeName], query,
+        options.values.schema, databaseEngine.mysql.public.connection, (errDB, found) => {
+          if (errDB) {
+            error.push(errDB);
+          } else {
+            if (found) {
+              result.push(options.message ? options.message :
+                { code: "DUPLICATED", params: { attribute: attributeName } });
+            }
+          }
+          callback();
+        });
+    case "mongodb":
+      return databaseEngine.mongodb.public.connection.collection(options.values.schema).findOne(query, (errDB, found) => {
+        if (errDB) {
+          error.push(errDB);
+        } else {
+          if (found) {
+            result.push(options.message ? options.message :
+              { code: "DUPLICATED", params: { attribute: attributeName } });
+          }
+        }
+        callback();
+      });
+    default:
+      error.push(new Error(apiMessage.DATABASE_NOT_FOUND));
+      return callback();
+  }
 }
 
 const REQUIRE = (req, attributeName, result, options = {}) => {

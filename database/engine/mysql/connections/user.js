@@ -3,7 +3,7 @@
 let config = require('../../../../setup/config');
 let mysql2 = require('mysql2');
 let logger = require('../../../../setup/logger').server('DATABASE');
-let serverLoggerMessage = require('../../../../constants/server.logger');
+let serverMessage = require('../../../../constants/server.logger');
 
 let pool = mysql2.createPool({
   host: config.get('DB_MYSQL_HOST'),
@@ -18,11 +18,11 @@ let pool = mysql2.createPool({
 let checkConnection = (callback) => {
   pool.getConnection((error, connection) => {
     if (error) {
-      logger.info(serverLoggerMessage.DATABASE_CONNECTION_FAILURE, error);
+      logger.info(serverMessage.DATABASE_CONNECTION_FAILURE, error);
       callback(error);
     } else {
       connection.release();
-      logger.info(serverLoggerMessage.DATABASE_CONNECTION_SUCCESS, config.get('DB_MYSQL_HOST') + ":" + config.get('DB_MYSQL_PORT') + "/" + config.get('DB_MYSQL_DBNAME'));
+      logger.info(serverMessage.DATABASE_CONNECTION_SUCCESS, config.get('DB_MYSQL_HOST') + ":" + config.get('DB_MYSQL_PORT') + "/" + config.get('DB_MYSQL_DBNAME'));
       callback()
     }
   });

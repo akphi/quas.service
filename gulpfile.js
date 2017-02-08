@@ -15,8 +15,8 @@ gulp.task('eslint', () => {
 gulp.task('develop.start', () => {
   nodemon({
     quiet: true,
-    "restartable": "rs",
-    "ignore": [
+    restartable: "rs",
+    ignore: [
       ".git",
       "node_modules/**/node_modules",
       "./deployment",
@@ -24,9 +24,9 @@ gulp.task('develop.start', () => {
       "**/*.log*",
       "*.rdb"
     ],
-    "execMap": {},
-    "events": {},
-    "watch": [
+    execMap: {},
+    events: {},
+    watch: [
       ".",
       ".env"
     ],
@@ -34,10 +34,14 @@ gulp.task('develop.start', () => {
       'DEBUGER': 'worker'
     },
     tasks: (changedFiles) => {
-      changedFiles.forEach(function (file) {
-        util.log('File changed', util.colors.magenta(file));
-      });
-      return ['eslint'];
+      let tasks = [];
+      if (changedFiles) {
+        tasks = ['eslint']
+        changedFiles.forEach(function (file) {
+          util.log('File changed', util.colors.magenta(file));
+        });
+      }
+      return tasks;
     }
   })
 });

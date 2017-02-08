@@ -1,7 +1,7 @@
 'use strict';
 
 let config = require('../server').config;
-let serverLoggerMessage = require('../server').loggerMessage;
+let serverMessage = require('../server').loggerMessage;
 let errorCode = require('../constants/error');
 let message = require('../language');
 
@@ -37,7 +37,7 @@ let errorValidation = (req, res, options = {}) => {
 
 let errorSystem = (err, req, res, next) => {
   if (err.error) {
-    err.error['message'] = err.error.message ? err.error.message : serverLoggerMessage.UNCAUGHT_EXCEPTION;
+    err.error['message'] = err.error.message ? err.error.message : serverMessage.UNCAUGHT_EXCEPTION;
     err.error['data'] = err.error.data ? err.error.data : err.error;
     if (err.logger) {
       (err.logger).error(err.error.message, err.error.data);
@@ -51,7 +51,7 @@ let errorSystem = (err, req, res, next) => {
         data: err.error.data
       } : {});
   } else {
-    require('../../../setup/logger').api('UNIDENTIFIED', 'v1').error(serverLoggerMessage.UNCAUGHT_EXCEPTION, err);
+    require('../../../setup/logger').api('UNIDENTIFIED', 'v1').error(serverMessage.UNCAUGHT_EXCEPTION, err);
   }
 }
 
