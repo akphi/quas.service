@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-let router = require('express').Router();
+let router = require("express").Router();
 
-let logger = require('../../server').logger.api('CONTROLLER', 'v1');
-let apiMessage = require('../../constants/api.logger');
-let response = require('../../helpers/response');
-let validator = require('../../validators/models/user');
-let models = require('../../models');
+let logger = require("../../server").logger.api("CONTROLLER", "v1");
+let apiMessage = require("../../constants/api.logger");
+let response = require("../../helpers/response");
+let validator = require("../../validators/models/user");
+let models = require("../../models");
 
-let Mysql = require('../../server').databaseEngine.mysql;
+let Mysql = require("../../server").databaseEngine.mysql;
 
-router.route('/')
+router.route("/")
 
   //TODO: fix this method
   .get((req, res, next) => {
@@ -23,7 +23,7 @@ router.route('/')
     //     res.json(users);
     //   }
     // });
-    Mysql.tool.findOne(["id", "username"], { username: "apk" }, "user", Mysql.user.connection, (errDB, result) => {
+    Mysql.tool.findOne(["id", "username"], { username: "apk" }, "user", Mysql.as("public"), (errDB, result) => {
       if (errDB) {
         return next({ logger: logger, error: { message: apiMessage.DATABASE_PERSISTENCE_FAILURE, data: errDB } });
       } else {
@@ -38,7 +38,7 @@ router.route('/')
         if (errorProcessing) {
           return next({ logger: logger, error: errorProcessing });
         }
-        Mysql.tool.insert(user, "user", Mysql.user.connection, (errDB) => {
+        Mysql.tool.insert(user, "user", Mysql.as("user"), (errDB) => {
           if (errDB) {
             return next({ logger: logger, error: { message: apiMessage.DATABASE_PERSISTENCE_FAILURE, data: errDB } });
           } else {

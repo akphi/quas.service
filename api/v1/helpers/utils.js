@@ -1,7 +1,8 @@
-'use strict';
+"use strict";
 
 let moment = require("moment");
-let config = require('../server').config;
+let config = require("../server").config;
+let databaseEngine = require("../server").databaseEngine;
 let type = require("../constants/models").type;
 
 let isEmptyObject = (object) => {
@@ -13,7 +14,7 @@ let isEmptyObject = (object) => {
 
 let parseDbObject = (input, dbType, callback) => {
   if (dbType) {
-    return require('../../../database/engine/' + dbType + '/helpers').parseDbObject(input, callback);
+    return databaseEngine[dbType].tool.parseDbObject(input, callback);
   }
   return callback();
 }

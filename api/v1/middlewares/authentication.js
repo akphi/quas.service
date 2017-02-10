@@ -1,14 +1,14 @@
-'usestrict';
+"usestrict";
 
-let config = require('../server').config;
-let error = require('../constants/error');
-let jwt = require('jsonwebtoken');
-let response = require('../helpers/response');
+let config = require("../server").config;
+let error = require("../constants/error");
+let jwt = require("jsonwebtoken");
+let response = require("../helpers/response");
 
 module.exports = (req, res, next) => {
-  let token = req.body.token || req.query.token || req.headers['authorization'];
+  let token = req.body.token || req.query.token || req.headers["authorization"];
   if (token) {
-    jwt.verify(token, config.get('TOKEN_JWT_SECRET'), (err, decodedToken) => {
+    jwt.verify(token, config.get("TOKEN_JWT_SECRET"), (err, decodedToken) => {
       if (err) {
         if (err.name == "TokenExpiredError") {
           // Token has expired

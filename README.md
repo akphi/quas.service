@@ -9,7 +9,9 @@ To start the service, follow the step:
 
   sudo redis-server
 
-	OR npm run-script init_cache
+```
+OR npm run-script init_cache
+```
 
 2. Start the MongoDB database
 
@@ -18,7 +20,7 @@ To start the service, follow the step:
 	1. mkdir db
 	2. mongod --dbpath <.../db>
 	3. mongo (in a seperate tab of terminal)
-	4. > use db;
+	4. use db;
 
 	OR npm run-script init_db
 

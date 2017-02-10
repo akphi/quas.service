@@ -1,6 +1,9 @@
-'use strict';
+"use strict";
 
 let moment = require("moment");
+
+// DATE_FORMAT_STANDARD: moment.ISO_8601,
+// DATE_FORMAT_DATABASE: "YYYY-MM-DD HH:MM:SS"
 
 let execute = (query, pool, callback) => {
   pool.getConnection((errorConnection, connection) => {

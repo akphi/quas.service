@@ -1,11 +1,16 @@
-'use strict';
+// @flow
+"use strict";
 
-let dbSanitizer = require('mongo-sanitize');
-let databaseEngine = require('../../server').databaseEngine;
-let validator = require('validator');
-let utils = require('../../helpers/utils');
-let apiMessage = require('../../constants/api.logger');
+let mongoSanitizer = require("mongo-sanitize");
+let databaseEngine = require("../../server").databaseEngine;
+let validator = require("validator");
+let utils = require("../../helpers/utils");
+let apiMessage = require("../../constants/api.logger");
 
+/**
+ * My namespace"s favorite kind of beer.
+ * @error {string}
+ */
 const LENGTH = (error, req, attributeName, result, options, callback) => {
   if (options.values.min && options.values.max) {
     if (req.body[attributeName].length < options.values.min || req.body[attributeName].length > options.values.max) {
@@ -41,15 +46,15 @@ const LENGTH = (error, req, attributeName, result, options, callback) => {
 
 const DUPLICATION = (error, req, attributeName, result, options, callback) => {
   let query = {};
-  query[attributeName] = req.body[attributeName];
   switch (options.values.engine) {
     case "mysql":
+      query[attributeName] = req.body[attributeName];
       return databaseEngine.mysql.tool.findOne([attributeName], query,
-        options.values.schema, databaseEngine.mysql.public.connection, (errDB, found) => {
+        options.values.schema, databaseEngine.mysql.as("public"), (errDB, found) => {
           if (errDB) {
             error.push(errDB);
           } else {
-            if (found) {
+            if (found.length !== 0) {
               result.push(options.message ? options.message :
                 { code: "DUPLICATED", params: { attribute: attributeName } });
             }
@@ -57,7 +62,8 @@ const DUPLICATION = (error, req, attributeName, result, options, callback) => {
           callback();
         });
     case "mongodb":
-      return databaseEngine.mongodb.public.connection.collection(options.values.schema).findOne(query, (errDB, found) => {
+      query[attributeName] = mongoSanitizer(req.body[attributeName]);
+      return databaseEngine.mongodb.public.as("public").collection(options.values.schema).findOne(query, (errDB, found) => {
         if (errDB) {
           error.push(errDB);
         } else {
@@ -76,7 +82,7 @@ const DUPLICATION = (error, req, attributeName, result, options, callback) => {
 
 const REQUIRE = (req, attributeName, result, options = {}) => {
   if (!req.body[attributeName]
-    || ((req.body[attributeName]).hasOwnProperty('length') && req.body[attributeName].length === 0)
+    || ((req.body[attributeName]).hasOwnProperty("length") && req.body[attributeName].length === 0)
     || utils.isEmptyObject(req.body[attributeName])) {
     result.push(options.message ? options.message : "REQUIRED");
     return true;
@@ -101,14 +107,14 @@ const TYPE = (req, attributeName, result, options = {}) => {
   }
   let tempResult = false;
   switch ((options.value ? options.value : options)) {
-    case 'string':
+    case "string":
       typeCheckResult = generateResult((typeof req.body[attributeName] === type), result, options);
       break;
-    case 'number':
-      tempResult = ((typeof req.body[attributeName] === type) || (typeof req.body[attributeName] === 'string' && !Number.isNaN(Number(req.body[attributeName]))));
+    case "number":
+      tempResult = ((typeof req.body[attributeName] === type) || (typeof req.body[attributeName] === "string" && !Number.isNaN(Number(req.body[attributeName]))));
       typeCheckResult = generateResult(tempResult, result, options);
       break;
-    case 'boolean':
+    case "boolean":
       typeCheckResult = generateResult((typeof req.body[attributeName] === type), result, options);
       break;
     default:

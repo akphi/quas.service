@@ -11,6 +11,7 @@
   },
   "main": "app.js",
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "async": "^2.0.1",
     "body-parser": "^1.0.1",
     "corser": "^2.0.0",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "eslint": "^3.13.1",
     "eslint-plugin-node": "^3.0.5",
+    "flow-bin": "^0.38.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
@@ -56,6 +58,7 @@
     "start": "node app.js",
     "start:dev": "gulp develop",
     "lint": "gulp lint",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   }
 }

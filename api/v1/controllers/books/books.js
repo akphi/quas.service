@@ -1,16 +1,17 @@
-'use strict';
+"use strict";
 
-let router = require('express').Router();
-let dbSanitizer = require('mongo-sanitize');
+let router = require("express").Router();
+let dbSanitizer = require("mongo-sanitize");
 
-// let Book = require('../../../../database/models/book');
-let logger = require('../../../../setup/logger').api('CONTROLLER', 'v1');
-let apiLoggerMessage = require('../../constants/api.logger');
-let validator = require('../../validators/models/book');
-let response = require('../../helpers/response');
-let error = require('../../constants/error');
+// let Book = require("../../../../database/models/book");
+let logger = require("../../server").logger.api("CONTROLLER", "v1");
+let apiLoggerMessage = require("../../constants/api.logger");
+let validator = require("../../validators/models/book");
+let response = require("../../helpers/response");
+let error = require("../../constants/error");
+let authentication = require("../../middlewares/authentication");
 
-router.route('/')
+router.route("/")
 
   .get((req, res, next) => {
     //TODO: Rewrite find, sanitize name
@@ -24,7 +25,7 @@ router.route('/')
     // });
   })
 
-  .post(require('../../middlewares/authentication'), (req, res, next) => {
+  .post(authentication, (req, res, next) => {
     //TODO: validation
     // let book = new Book({
     //   name: req.body.name,
@@ -38,7 +39,7 @@ router.route('/')
     //   if (errDB) {
     //     res.send(errDB);
     //   } else {
-    //     res.json({ message: 'Book added!' });
+    //     res.json({ message: "Book added!" });
     //   }
     // });
   });

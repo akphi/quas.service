@@ -1,18 +1,18 @@
-'usestrict';
+"usestrict";
 
-let gulp = require('gulp');
-let util = require('gulp-util');
-let nodemon = require('gulp-nodemon');
-let eslint = require('gulp-eslint');
-let runSequence = require('run-sequence');
+let gulp = require("gulp");
+let util = require("gulp-util");
+let nodemon = require("gulp-nodemon");
+let eslint = require("gulp-eslint");
+let runSequence = require("run-sequence");
 
-gulp.task('eslint', () => {
-  return gulp.src(['./**/*.js', '!node_modules/**', '!deployment/**'])
+gulp.task("eslint", () => {
+  return gulp.src(["./**/*.js", "!node_modules/**", "!deployment/**"])
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
-gulp.task('develop.start', () => {
+gulp.task("develop.start", () => {
   nodemon({
     quiet: true,
     restartable: "rs",
@@ -31,14 +31,15 @@ gulp.task('develop.start', () => {
       ".env"
     ],
     env: {
-      'DEBUGER': 'worker'
+      "NODE_PATH": "./server",
+      "DEBUGER": "worker"
     },
     tasks: (changedFiles) => {
       let tasks = [];
       if (changedFiles) {
-        tasks = ['eslint']
+        tasks = ["eslint"]
         changedFiles.forEach(function (file) {
-          util.log('File changed', util.colors.magenta(file));
+          util.log("File changed", util.colors.magenta(file));
         });
       }
       return tasks;
@@ -46,6 +47,6 @@ gulp.task('develop.start', () => {
   })
 });
 
-gulp.task('develop', (done) => {
-  runSequence('eslint', 'develop.start', done);
+gulp.task("develop", (done) => {
+  runSequence("eslint", "develop.start", done);
 });

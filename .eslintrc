@@ -7,15 +7,22 @@
     "plugin:node/recommended"
   ],
   "rules": {
+    "quotes": [
+      "warn",
+      "double",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
     "indent": [
-      1,
+      "warn",
       2,
       {
         "SwitchCase": 1
       }
     ],
     "node/no-unpublished-require": [
-      "error",
+      "warn",
       {
         "allowModules": [
           "gulpfile"
@@ -23,7 +30,7 @@
       }
     ],
     "comma-dangle": [
-      1,
+      "warn",
       "never"
     ],
     "no-process-exit": 0,
@@ -32,7 +39,7 @@
       "module.exports"
     ],
     "no-unused-vars": [
-      1,
+      "warn",
       {
         "argsIgnorePattern": "^next$"
       }

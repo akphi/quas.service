@@ -1,14 +1,17 @@
-'use strict';
+"use strict";
+
+let projectPath = "../../";
+let serverPath = "../../server/";
 
 module.exports = {
   path: {
-    base: "../../",
-    database: "../../database/",
-    setup: "../../setup/",
-    constants: "../../constants/"
+    base: projectPath,
+    database: serverPath + "database/",
+    setup: serverPath + "setup/",
+    constants: serverPath + "constants/"
   },
-  databaseEngine: require("../../database/engine"),
-  logger: require("../../setup/logger"),
-  config: require("../../setup/config"),
-  loggerMessage: require("../../constants/server.logger")
+  databaseEngine: require(serverPath + "database/engine"),
+  logger: require(serverPath + "setup/logger"),
+  config: require(serverPath + "setup/config"),
+  loggerMessage: require(serverPath + "constants/server.logger")
 };

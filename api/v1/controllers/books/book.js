@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-let router = require('express').Router();
-let logger = require('../../server').logger.api('CONTROLLER', 'v1');
+let router = require("express").Router();
+let logger = require("../../server").logger.api("CONTROLLER", "v1");
 
-router.route('/')
+router.route("/")
 
   .get((req, res, next) => {
     // //TODO: sanitize 
@@ -27,15 +27,15 @@ router.route('/')
     //     //TODO: validation
     //     book.name = req.body.name;
     //     book.edition = (req.body.edition ? req.body.edition : 0);
-    //     book.author = (req.body.author ? req.body.author : 'noone');
-    //     book.publisher = (req.body.publisher ? req.body.publisher : 'them');
-    //     book.isbn = (req.body.isbn ? req.body.isbn : '00100-001');
+    //     book.author = (req.body.author ? req.body.author : "noone");
+    //     book.publisher = (req.body.publisher ? req.body.publisher : "them");
+    //     book.isbn = (req.body.isbn ? req.body.isbn : "00100-001");
     //     book.save((errDB) => {
     //       //TODO: res
     //       if (errDB) {
     //         res.send(errDB);
     //       } else {
-    //         res.json({ message: 'Book updated!' });
+    //         res.json({ message: "Book updated!" });
     //       }
     //     });
     //   }
@@ -51,7 +51,7 @@ router.route('/')
     //   if (errDB) {
     //     res.send(errDB);
     //   } else {
-    //     res.json({ message: 'Book removed' });
+    //     res.json({ message: "Book removed" });
     //   }
     // });
   });

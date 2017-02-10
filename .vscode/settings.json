@@ -1,11 +1,17 @@
-// Place your settings in this file to overwrite default and user settings.
+// Credit https://github.com/Yukaii/vscode-markdown-github-css/blob/master/github.css
 {
-  "editor.renderWhitespace": true,
+  "editor.renderWhitespace": "all",
   "editor.tabSize": 2,
+  "markdown.styles": [
+    "https://cdn.rawgit.com/BigstickCarpet/5d31c053d0b1d52389eb2723f7550907/raw/88e4538c0fc46e39a97f332b43546f92762a6bb6/github-markdown.css",
+    ".vscode/github-markdown.css"
+  ],
   "files.exclude": {},
   "search.exclude": {
     "node_modules": true,
     "public": true
   },
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "flow.path": "node_modules/.bin/flow",
+  "javascript.validate.enable": false
 }
