@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user(
 id integer(10) auto_increment,
-username varchar(100),
+username varchar(100) unique,
 password varchar(100),
 primary key (id)
 );

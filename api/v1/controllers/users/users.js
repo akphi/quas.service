@@ -14,16 +14,7 @@ router.route("/")
 
   //TODO: fix this method
   .get((req, res, next) => {
-    // // mongoDB.connection().authenticate();
-    // mongoDB.connection().collection("user").save({ username: "an" }, (errDB, users) => {
-    //   // mongoDB.connection().collection("userds");
-    //   if (errDB) {
-    //     res.send(errDB);
-    //   } else {
-    //     res.json(users);
-    //   }
-    // });
-    Mysql.tool.findOne(["id", "username"], { username: "apk" }, "user", Mysql.as("public"), (errDB, result) => {
+    Mysql.tool.find(["id", "username"], { username: "apk" }, "user", Mysql.as("public"), (errDB, result) => {
       if (errDB) {
         return next({ logger: logger, error: { message: apiMessage.DATABASE_PERSISTENCE_FAILURE, data: errDB } });
       } else {

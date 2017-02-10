@@ -81,10 +81,7 @@ let groupParamsBuilder = (objArrays, referenceKeys) => {
     })
     paramsGroup.push(tempGroup);
   })
-  if (paramsGroup.length === 1) {
-    return { keys: { paramNames: keys }, values: { param: paramsGroup[0] } };
-  }
-  return { keys: { paramNames: keys }, values: { params: paramsGroup } };
+  return { keys: { paramKeys: keys }, values: { paramValues: paramsGroup } };
 }
 
 let queryBuilder = (queryArray) => {
@@ -94,18 +91,14 @@ let queryBuilder = (queryArray) => {
       if (item.data) {
         queryParams.push(item.data[Object.keys(item.data)[0]]);
         return (Object.keys(item.data)[0] + "= ?");
-      } else if (item.paramNames) {
-        return "(" + item.paramNames.join(",") + ")";
-      } else if (item.param) {
-        queryParams = queryParams.concat(item.param);
-        return "(" + (item.param.fill("?")).join(",") + ")";
-      } else if (item.params) {
-        item.params = item.params.map((param) => {
+      } else if (item.paramKeys) {
+        return "(" + item.paramKeys.join(",") + ")";
+      } else if (item.paramValues) {
+        return item.paramValues.map((param) => {
           queryParams = queryParams.concat(param);
           return "(" + (param.fill("?")).join(",") + ")";
-        });
-        return item.params.join(",");
-      } else if (item.length) {
+        }).join(",");
+      } else if (Array.isArray(item)) {
         return item.join(",");
       }
     } else {
