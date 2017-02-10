@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-let async = require('async');
-let rule = require('../rules');
-let methods = require('./methods');
+let async = require("async");
+let rule = require("../rules");
+let methods = require("./methods");
 
-let logger = require('../../server').logger.api('VALIDATOR', 'v1');
-let apiLoggerMessage = require('../../constants/api.logger');
-let response = require('../../helpers/response');
-let utils = require('../../helpers/utils');
-let processingMode = require('../../constants/models').processingMode;
+let logger = require("../../server").logger.api("VALIDATOR", "v1");
+let apiLoggerMessage = require("../../constants/api.logger");
+let response = require("../../helpers/response");
+let utils = require("../../helpers/utils");
+let processingMode = require("../../constants/models").processingMode;
 
 const validateObject = (req, res, next, callbackMain, option) => {
   let error = [];
@@ -34,7 +34,7 @@ const validateObject = (req, res, next, callbackMain, option) => {
 
 const validateAttribute = (req, resultValidation, error, options, processingInstruction, callbackRootValidator) => {
   let errorValidationList = [];
-  if ((typeof options.required === 'boolean' && options.required) || options.required.value) {
+  if ((typeof options.required === "boolean" && options.required) || options.required.value) {
     if (!methods["REQUIRE"](req, options.name, errorValidationList, options.required)) {
       validateAttributeCore(req, resultValidation, error, options, errorValidationList, processingInstruction, callbackRootValidator);
     } else {
@@ -43,7 +43,7 @@ const validateAttribute = (req, resultValidation, error, options, processingInst
     }
   } else {
     // not-required + empty -> no validation
-    if (!req.body[options.name] || (options.type === 'string' && req.body[options.name].length === 0)) {
+    if (!req.body[options.name] || (options.type === "string" && req.body[options.name].length === 0)) {
       callbackRootValidator();
     } else {
       validateAttributeCore(req, resultValidation, error, options, errorValidationList, processingInstruction, callbackRootValidator);

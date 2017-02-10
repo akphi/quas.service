@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   CLUSTER_WORKER_INIT: "Cluster started worker",

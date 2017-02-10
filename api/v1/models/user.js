@@ -1,6 +1,6 @@
-'use strict';
-let encryptor = require('../helpers/encryption');
-let apiLoggerMessage = require('../constants/api.logger');
+"use strict";
+let encryptor = require("../helpers/encryption");
+let apiLoggerMessage = require("../constants/api.logger");
 
 module.exports = {
   username: { type: String, required: true },

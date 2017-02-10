@@ -9,10 +9,13 @@ let database = require("./server/database/engine");
 let logger = require("./server/setup/logger").server("APP");
 let serverMessage = require("./server/constants/server.logger");
 let config = require("./server/setup/config");
+let helmet = require("helmet");
+let bodyParser = require("body-parser");
+let os = require("os")
 
 if (cluster.isMaster) {
   logger.info(serverMessage.CLUSTER_MASTER_INIT, process.pid);
-  let workersNumber = config.get("NODE_CORE_WORKERS_SIZE") || require("os").cpus().length;
+  let workersNumber = config.get("NODE_CORE_WORKERS_SIZE") || os.cpus().length;
   for (let i = 0; i < workersNumber; ++i) {
     logger.info(serverMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
   }
@@ -23,12 +26,10 @@ if (cluster.isMaster) {
   async.series([
     //Setup the app
     (callback) => {
-      let helmet = require("helmet");
       app.use(helmet());
       app.disable("x-powered-by");
       app.use(express.static("public"));
 
-      let bodyParser = require("body-parser");
       app.use(bodyParser.urlencoded({
         extended: true
       }));

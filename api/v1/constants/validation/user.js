@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   USERNAME_MIN_LENGTH: 3,

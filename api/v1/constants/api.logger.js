@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   VALIDATION_ENGINE_FAILURE: "Validation engine failure",

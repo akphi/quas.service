@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 let processingMode = {
   DO_NOT_PROCESS: "DO_NOT_PROCESS",

@@ -1,5 +1,5 @@
-'use strict';
-let user = require('./user');
+"use strict";
+let user = require("./user");
 
 module.exports = {
   USER_USERNAME: user.USER_USERNAME,

@@ -1,9 +1,13 @@
-'use strict';
+"use strict";
 
-let router = require('express').Router();
+let router = require("express").Router();
+let users = require("./users");
+let login = require("./login");
+let user = require("./user");
+let authentication = require("../../middlewares/authentication");
 
-router.use('/', require('./users'));
-router.use('/login', require('./login'));
-router.use('/:user_id', require('../../middlewares/authentication'), require('./user'));
+router.use("/", users);
+router.use("/login", login);
+router.use("/:user_id", authentication, user);
 
 module.exports = router;

@@ -1,11 +1,15 @@
-'use strict';
+"use strict";
 
 let async = require("async");
-let processingMode = require('../constants/models').processingMode;
-let utils = require('../helpers/utils');
+let processingMode = require("../constants/models").processingMode;
+let utils = require("../helpers/utils");
+let models = {
+  user: require("./user"),
+  book: require("./book")
+}
 
 let modelize = (modelName, dbName, processingInstruction, data, callback) => {
-  let model = require('./' + modelName);
+  let model = models[modelName];
   async.series([
     // Convert type
     (callbackMain) => {

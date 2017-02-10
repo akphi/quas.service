@@ -1,8 +1,10 @@
-'use strict';
+"use strict";
 
-let router = require('express').Router();
+let router = require("express").Router();
+let books = require("./books");
+let users = require("./users");
 
-// router.use('/books', require('./books'));
-router.use('/users', require('./users'));
+router.use("/books", books);
+router.use("/users", users);
 
 module.exports = router;

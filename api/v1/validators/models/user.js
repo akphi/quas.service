@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-let validatorHelper = require('../helpers/validator');
+let validatorHelper = require("../helpers/validator");
 
 const registration = (req, res, next, callback) => {
   validatorHelper.validateObject(req, res, next, callback, {
