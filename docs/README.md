@@ -1,1 +1,0 @@
-Use Swagger for documentation

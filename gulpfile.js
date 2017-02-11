@@ -6,11 +6,19 @@ let nodemon = require("gulp-nodemon");
 let eslint = require("gulp-eslint");
 let runSequence = require("run-sequence");
 
+let APP_SRC = __dirname;
+
 gulp.task("eslint", () => {
   return gulp.src(["./src/**/*.js", "!node_modules/**", "!deployment/**"])
     .pipe(eslint())
     .pipe(eslint.format());
 });
+
+gulp.task("move", () => {
+  return gulp.src(["./src/**", "!./src/**/*.js"])
+    .pipe(gulp.dest("./build"));
+});
+
 
 gulp.task("develop.start", () => {
   nodemon({
@@ -32,8 +40,8 @@ gulp.task("develop.start", () => {
       ".env"
     ],
     env: {
-      "BASE_PATH": __dirname,
       "DEBUGER": "worker"
+      // For debug module to load
     },
     tasks: (changedFiles) => {
       let tasks = [];
