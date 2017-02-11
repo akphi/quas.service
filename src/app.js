@@ -3,6 +3,8 @@
 let express = require("express");
 let app = express();
 let cluster = require("cluster");
+let os = require("os");
+var path = require("path");
 let async = require("async");
 let router = require("./api");
 let database = require("./server/database/engine");
@@ -14,7 +16,6 @@ let serverMessage = require("./server/constants/server.logger");
 let config = require("./server/setup/config");
 let helmet = require("helmet");
 let bodyParser = require("body-parser");
-let os = require("os");
 
 if (cluster.isMaster) {
   debugLogger(chalk.grey(serverMessage.CLUSTER_MASTER_INIT + " " + process.pid));
@@ -31,7 +32,6 @@ if (cluster.isMaster) {
     (callback) => {
       app.use(helmet());
       app.disable("x-powered-by");
-      app.use(express.static("public"));
 
       app.use(bodyParser.urlencoded({
         extended: true
@@ -67,6 +67,7 @@ if (cluster.isMaster) {
         })
       } else {
         debugLogger(chalk.grey(serverMessage.INITIALIZATION_SUCCESS + " " + process.pid));
+        app.use(express.static(path.join(__dirname, "public")));
         app.use("/api", router);
         app.use("*", (req, res) => {
           res.status(404).json({});
