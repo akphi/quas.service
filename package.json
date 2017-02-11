@@ -56,7 +56,7 @@
     "db:mongodb": "sudo mongod --dbpath ../db/quas_mongodb_db/ --auth",
     "db:mysqldb": "mysqld",
     "db:cache": "sudo redis-server",
-    "start": "node app.js",
+    "start": "node ./src/app.js",
     "start:dev": "gulp develop",
     "lint": "gulp lint",
     "watch": "gulp watch",

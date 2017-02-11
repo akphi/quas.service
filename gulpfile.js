@@ -7,13 +7,14 @@ let eslint = require("gulp-eslint");
 let runSequence = require("run-sequence");
 
 gulp.task("eslint", () => {
-  return gulp.src(["./**/*.js", "!node_modules/**", "!deployment/**"])
+  return gulp.src(["./src/**/*.js", "!node_modules/**", "!deployment/**"])
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
 gulp.task("develop.start", () => {
   nodemon({
+    script: "src/app.js",
     quiet: true,
     restartable: "rs",
     ignore: [

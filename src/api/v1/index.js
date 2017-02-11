@@ -1,6 +1,7 @@
 "use strict";
 
 let router = require("express").Router();
+let config = require("./server").config;
 let yaml = require("js-yaml");
 let swaggerUi = require("swagger-ui-express");
 let fs = require("fs");
@@ -11,7 +12,7 @@ let controllers = require("./controllers");
 let logger = require("./server").logger.api("ROUTER", "v1");
 let apiMessage = require("./constants/api.logger");
 
-fs.readFile(__dirname + "/docs/swagger.yaml", { encoding: "utf-8" }, (errReadFile, data) => {
+fs.readFile(config.get("BASE_PATH") + "/docs/v1.yaml", { encoding: "utf-8" }, (errReadFile, data) => {
   if (errReadFile) {
     logger.error(apiMessage.DOCS_LOAD_FAILED, errReadFile);
   } else {
