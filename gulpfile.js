@@ -31,14 +31,14 @@ gulp.task("develop.start", () => {
       ".env"
     ],
     env: {
-      "NODE_PATH": "./server",
+      "BASE_PATH": __dirname,
       "DEBUGER": "worker"
     },
     tasks: (changedFiles) => {
       let tasks = [];
       if (changedFiles) {
         tasks = ["eslint"]
-        changedFiles.forEach(function (file) {
+        changedFiles.forEach((file) => {
           util.log("File changed", util.colors.magenta(file));
         });
       }

@@ -10,7 +10,7 @@ let execute = (query, pool, callback) => {
     if (errorConnection) {
       callback(errorConnection);
     } else {
-      connection.execute(query.string, query.params, function (errExecuteQuery, rows, columns) {
+      connection.execute(query.string, query.params, (errExecuteQuery, rows, columns) => {
         connection.release();
         connection.unprepare(query.string);
         if (errExecuteQuery) {

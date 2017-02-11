@@ -1,6 +1,7 @@
 "use strict";
 
 require("winston-daily-rotate-file");
+let async = require("async");
 let moment = require("moment");
 let winston = require("winston");
 let split = require("split");
@@ -70,7 +71,7 @@ let serverLogger = (label) => {
 };
 
 let apiLogger = (label, version = "undefined") => {
-  mkdirp(directories.api + version, function (errMkdirp) {
+  mkdirp(directories.api + version, (errMkdirp) => {
     if (errMkdirp) {
       serverLogger("APP").error(serverMessage.DIRECTORY_CREATION_FAILURE, version);
     }
@@ -94,7 +95,6 @@ let trafficTracker = new winston.Logger({
       prepend: true
     }),
     consoleTransport("traffic-console-log", (process.env.SERVER_ENV === "development" ? "debug" : "info"), "TRAFFIC", undefined)
-    // Formatting will be taken care by morgan
   ]
 });
 
@@ -110,7 +110,14 @@ winston.handleExceptions([
   })
 ]);
 
+let serverDebugger = (input) => {
+  if (process.env.SERVER_ENV === "development") {
+    process.stdout.write(input + "\n");
+  }
+}
+
 module.exports = {
+  debug: serverDebugger,
   stream: split().on("data", (message) => {
     trafficTracker.info(message)
   }),

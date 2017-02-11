@@ -6,21 +6,24 @@ let cluster = require("cluster");
 let async = require("async");
 let router = require("./api");
 let database = require("./server/database/engine");
-let logger = require("./server/setup/logger").server("APP");
+let logger = require("./server/setup/logger");
+let serverLogger = logger.server("APP");
+let debugLogger = logger.debug;
+let chalk = require("chalk");
 let serverMessage = require("./server/constants/server.logger");
 let config = require("./server/setup/config");
 let helmet = require("helmet");
 let bodyParser = require("body-parser");
-let os = require("os")
+let os = require("os");
 
 if (cluster.isMaster) {
-  logger.info(serverMessage.CLUSTER_MASTER_INIT, process.pid);
+  debugLogger(chalk.grey(serverMessage.CLUSTER_MASTER_INIT + " " + process.pid));
   let workersNumber = config.get("NODE_CORE_WORKERS_SIZE") || os.cpus().length;
   for (let i = 0; i < workersNumber; ++i) {
-    logger.info(serverMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
+    debugLogger(chalk.grey(serverMessage.CLUSTER_WORKER_INIT + " " + cluster.fork().process.pid));
   }
   cluster.on("exit", () => {
-    logger.info(serverMessage.CLUSTER_WORKER_INIT, cluster.fork().process.pid);
+    debugLogger(chalk.grey(serverMessage.CLUSTER_WORKER_INIT + " " + cluster.fork().process.pid));
   });
 } else {
   async.series([
@@ -34,7 +37,7 @@ if (cluster.isMaster) {
         extended: true
       }));
       app.use(bodyParser.json());
-      app.use(function (error, req, res, next) {
+      app.use((error, req, res, next) => {
         if (error instanceof SyntaxError) {
           return res.status(400).json((config.get("SERVER_ENV") === "development" ? error : {}));
         }
@@ -58,12 +61,12 @@ if (cluster.isMaster) {
     // Error Handler
     (error) => {
       if (error) {
-        logger.error(serverMessage.INITIALIZATION_FAILURE, error);
+        serverLogger.error(serverMessage.INITIALIZATION_FAILURE, error);
         app.route("*").all((req, res) => {
           res.status(500).json((config.get("SERVER_ENV") === "development" ? error : {}));
         })
       } else {
-        logger.info(serverMessage.INITIALIZATION_SUCCESS);
+        debugLogger(chalk.grey(serverMessage.INITIALIZATION_SUCCESS + " " + process.pid));
         app.use("/api", router);
         app.use("*", (req, res) => {
           res.status(404).json({});
@@ -74,8 +77,8 @@ if (cluster.isMaster) {
 
 // Handle uncaught exception
 process.on("uncaughtException", (error) => {
-  logger.info(serverMessage.UNCAUGHT_EXCEPTION, { message: error.message, stack: error.stack });
-  logger.info(serverMessage.CLUSTER_WORKER_TERMINATE, process.pid);
+  serverLogger.error(serverMessage.UNCAUGHT_EXCEPTION, { message: error.message, stack: error.stack });
+  debugLogger(chalk.grey(serverMessage.CLUSTER_WORKER_TERMINATE + " " + process.pid));
   process.exit(1);
 })
 
