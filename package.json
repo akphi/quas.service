@@ -19,7 +19,7 @@
     "minimist": "^0.1.0",
     "moment": "^2.15.1",
     "mongo-sanitize": "^1.0.0",
-    "mongoose": "^4.6.1",
+    "mongoose": "^5.7.6",
     "morgan": "^1.7.0",
     "nconf": "^0.8.4",
     "rate-limit-redis": "^1.0.4",
