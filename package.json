@@ -16,7 +16,7 @@
     "express-rate-limit": "^2.5.0",
     "helmet": "^2.3.0",
     "jsonwebtoken": "^7.1.9",
-    "minimist": "^0.1.0",
+    "minimist": "^1.2.5",
     "moment": "^2.15.1",
     "mongo-sanitize": "^1.0.0",
     "mongoose": "^5.7.6",
